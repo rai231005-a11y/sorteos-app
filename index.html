@@ -5,203 +5,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SORTEOS ⚡ PRO</title>
 
+<link rel="stylesheet" href="style.css">
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
-<style>
-body{
-margin:0;
-font-family:Arial;
-background:#0b0b0b;
-color:white;
-}
-
-/* HEADER */
-.header{
-text-align:center;
-padding:15px;
-font-size:28px;
-font-weight:bold;
-color:#f5c542;
-}
-
-/* BOTONES */
-.btn{
-background:#f5c542;
-color:black;
-padding:10px 15px;
-border-radius:10px;
-margin:5px;
-cursor:pointer;
-border:none;
-font-weight:bold;
-}
-
-/* GRID */
-.grid{
-display:grid;
-grid-template-columns:repeat(10,1fr);
-gap:8px;
-padding:10px;
-}
-
-.cell{
-background:#1a1a1a;
-border-radius:10px;
-text-align:center;
-padding:10px;
-cursor:pointer;
-font-size:14px;
-}
-
-.libre{background:#1a1a1a;}
-.apartado{background:#facc15;color:black;}
-.pagado{background:#22c55e;}
-
-input{
-width:100%;
-padding:10px;
-margin:5px 0;
-border-radius:8px;
-border:none;
-background:#1a1a1a;
-color:white;
-}
-
-.panel{
-padding:10px;
-}
-
-.ticket{
-background:black;
-border:2px solid gold;
-padding:20px;
-border-radius:15px;
-color:white;
-}
-
-.export{
-background:black;
-padding:20px;
-}
-</style>
 </head>
 
 <body>
 
-<div class="header">SORTEOS ⚡</div>
+<div id="app">
 
-<div class="panel">
+<!-- HEADER -->
+<header>
+  <img src="assets/logo.png" class="logo">
+  <h1>SORTEOS ⚡</h1>
+</header>
 
-<input id="nombre" placeholder="Nombre participante">
-<button class="btn" onclick="agregar()">Apartar</button>
-<button class="btn" onclick="pagar()">Pagado</button>
-<button class="btn" onclick="exportar()">Exportar</button>
+<!-- HOME -->
+<div id="home" class="screen active">
+  <h2>Selecciona tipo de sorteo</h2>
+
+  <div class="menu">
+    <button onclick="crearSorteo('loteria')">Lotería 00–99</button>
+    <button onclick="crearSorteo('ruleta')">Ruleta</button>
+    <button onclick="crearSorteo('cartas')">Cartas</button>
+  </div>
+</div>
+
+<!-- PANEL -->
+<div id="panel" class="screen">
+
+  <input id="nombre" placeholder="Nombre participante">
+
+  <div class="acciones">
+    <button onclick="setModo('apartado')">Apartar</button>
+    <button onclick="setModo('pagado')">Pagado</button>
+    <button onclick="exportar()">Exportar</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="side">
+    <h3>Participantes</h3>
+    <div id="lista"></div>
+  </div>
 
 </div>
 
-<div class="grid" id="grid"></div>
-
-<div id="ticketArea"></div>
-
-<script>
-
-let data = Array(100).fill(null);
-let selected = null;
-
-/* CREAR TABLA */
-function crear(){
-let g=document.getElementById("grid");
-g.innerHTML="";
-for(let i=0;i<100;i++){
-let d=document.createElement("div");
-d.className="cell libre";
-d.innerHTML=i;
-
-if(data[i]){
-d.innerHTML=i+"<br>"+data[i].nombre;
-d.className="cell "+data[i].estado;
-}
-
-d.onclick=()=>{selected=i;};
-g.appendChild(d);
-}
-}
-crear();
-
-/* APARTAR */
-function agregar(){
-if(selected===null)return;
-let nombre=document.getElementById("nombre").value;
-if(!nombre)return;
-
-data[selected]={
-nombre:nombre,
-estado:"apartado"
-};
-crear();
-}
-
-/* PAGAR */
-function pagar(){
-if(selected===null)return;
-if(!data[selected])return;
-
-data[selected].estado="pagado";
-
-generarBoleto(selected,data[selected].nombre);
-crear();
-}
-
-/* BOLETO */
-function generarBoleto(num,nombre){
-let div=document.getElementById("ticketArea");
-
-div.innerHTML=`
-<div class="ticket">
-<h2>SORTEOS ⚡</h2>
-<h3>Número: ${num}</h3>
-<h3>${nombre}</h3>
-<h3 style="color:#22c55e">PAGADO ✔</h3>
 </div>
-`;
-}
 
-/* EXPORTAR */
-function exportar(){
-let cont=document.createElement("div");
-cont.className="export";
-
-let html="<h2 style='color:gold;text-align:center;'>SORTEOS ⚡</h2>";
-html+="<div class='grid'>";
-
-for(let i=0;i<100;i++){
-let style="background:#fff;color:#000;";
-let txt=i;
-
-if(data[i]){
-if(data[i].estado=="pagado") style="background:#22c55e;color:#fff;";
-if(data[i].estado=="apartado") style="background:#facc15;color:#000;";
-txt=i+"<br>"+data[i].nombre;
-}
-
-html+=`<div style="${style};padding:8px;border-radius:8px;text-align:center">${txt}</div>`;
-}
-
-html+="</div>";
-cont.innerHTML=html;
-
-document.body.appendChild(cont);
-
-html2canvas(cont).then(canvas=>{
-let a=document.createElement("a");
-a.href=canvas.toDataURL();
-a.download="sorteo.png";
-a.click();
-cont.remove();
-});
-}
-
-</script>
+<script src="app.js"></script>
 
 </body>
 </html>
