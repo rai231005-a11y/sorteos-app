@@ -1,0 +1,82 @@
+body{
+margin:0;
+font-family:Arial;
+background:#0a0a0a;
+color:white;
+}
+
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+padding:15px;
+border-bottom:1px solid gold;
+}
+
+.logo-area{
+display:flex;
+align-items:center;
+gap:10px;
+color:gold;
+}
+
+.logo-area img{
+width:40px;
+}
+
+.menu button{
+background:gold;
+border:none;
+padding:8px;
+margin:3px;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* TOP */
+.top{
+text-align:center;
+padding:10px;
+}
+
+.config input{
+margin:5px;
+padding:8px;
+border-radius:8px;
+border:none;
+}
+
+/* MAIN */
+main{
+display:flex;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(10,1fr);
+gap:5px;
+padding:10px;
+flex:3;
+}
+
+.cell{
+padding:10px;
+text-align:center;
+border-radius:8px;
+cursor:pointer;
+background:#222;
+}
+
+.libre{background:white;color:black;}
+.apartado{background:#facc15;color:black;}
+.pagado{background:#22c55e;}
+.ganador{border:2px solid gold;}
+
+.side{
+flex:1;
+padding:10px;
+}
+
+#lista div{
+margin:5px 0;
+}
