@@ -8,243 +8,230 @@
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 <style>
-:root{
---bg:#020617;
---card:#0b1220;
---primary:#38bdf8;
---green:#22c55e;
---yellow:#facc15;
---red:#ef4444;
---gold:#f59e0b;
-}
+
 body{
 margin:0;
 font-family:Arial;
-background:var(--bg);
-color:#fff;
+background:#111;
+color:white;
 }
-header{
-text-align:center;
-padding:20px;
-font-size:28px;
+
+/* HEADER */
+.header{
+background:linear-gradient(90deg,#000,#1a1a1a);
+padding:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:2px solid gold;
+}
+
+.logo{
+font-size:40px;
 font-weight:bold;
-color:var(--primary);
+color:white;
 }
+
+.logo span{
+color:gold;
+}
+
+.menu button{
+margin-left:10px;
+padding:10px;
+border-radius:10px;
+border:none;
+background:#222;
+color:white;
+}
+
+/* LAYOUT */
 .container{
 display:flex;
-}
-.sidebar{
-width:220px;
-background:#050b18;
 padding:15px;
+gap:15px;
 }
-.sidebar button{
-width:100%;
-margin-bottom:10px;
-padding:10px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-}
-.main{
-flex:1;
-padding:20px;
-}
+
+/* TABLA */
 .grid{
 display:grid;
 grid-template-columns:repeat(10,1fr);
 gap:6px;
-max-width:500px;
-}
-.cell{
-background:#111827;
+background:#1a1a1a;
 padding:10px;
+border-radius:15px;
+}
+
+.cell{
+background:#e5e5e5;
+color:black;
+padding:10px;
+border-radius:8px;
 text-align:center;
-border-radius:6px;
+font-weight:bold;
 cursor:pointer;
-font-size:12px;
 }
-.paid{background:var(--green);}
-.reserved{background:var(--yellow);color:#000;}
-.inputs{
-margin-top:20px;
-max-height:300px;
-overflow:auto;
+
+.paid{
+background:#1f7a3a;
+color:white;
 }
-.inputs div{
+
+.winner{
+background:gold;
+color:black;
+}
+
+/* LISTA */
+.lista{
+background:#1a1a1a;
+padding:15px;
+border-radius:15px;
+width:250px;
+}
+
+.lista h3{
+margin-top:0;
+}
+
+.item{
 display:flex;
-margin-bottom:5px;
+justify-content:space-between;
+padding:5px 0;
+border-bottom:1px solid #333;
 }
-.inputs input{
-flex:1;
-padding:8px;
-border-radius:6px;
-border:none;
-}
-.pay{
-width:40px;
-background:#222;
-border:none;
-color:white;
-}
-.pay.active{
-background:var(--green);
-}
-.top{
-margin-bottom:15px;
-}
-button{
-cursor:pointer;
-}
-.ticket{
-background:black;
-color:white;
-padding:20px;
+
+/* GANADOR */
+.ganador{
+background:linear-gradient(#000,#222);
+border:2px solid gold;
 border-radius:20px;
+padding:20px;
+text-align:center;
 width:300px;
-margin:auto;
 }
-.hidden{display:none;}
+
+.ganador h2{
+color:gold;
+}
+
+/* CONFIG */
+.footer{
+background:#1a1a1a;
+padding:15px;
+margin:15px;
+border-radius:15px;
+display:flex;
+justify-content:space-between;
+}
+
 </style>
 </head>
 
 <body>
 
-<header>SORTEOS ⚡ Admin Pro</header>
+<div class="header">
+<div class="logo">sorteos <span>⚡</span></div>
 
-<div id="login">
-<div style="display:flex;justify-content:center;margin-top:100px;">
-<div style="background:#0b1220;padding:30px;border-radius:12px;">
-<h2>Ingreso ADMIN</h2>
-<input id="pin" placeholder="PIN (1234)">
-<br><br>
-<button onclick="login()">Entrar</button>
-</div>
-</div>
-</div>
-
-<div id="app" class="hidden">
-<div class="container">
-
-<div class="sidebar">
-<button onclick="nuevo()">+ Nuevo sorteo</button>
-<button onclick="reset()">Reset</button>
+<div class="menu">
+<button onclick="nuevo()">Nuevo</button>
 <button onclick="exportar()">Exportar</button>
 <button onclick="ganador()">Ganador</button>
 </div>
-
-<div class="main">
-
-<div class="top">
-Pagados: <span id="pagados">0</span> |
-Total: $<span id="total">0</span>
 </div>
 
+<div class="container">
+
+<div>
 <div class="grid" id="grid"></div>
-
-<div class="inputs" id="inputs"></div>
-
-</div>
-</div>
 </div>
 
-<div id="ticket" class="hidden"></div>
+<div class="lista">
+<h3>Lista</h3>
+<div id="lista"></div>
+</div>
+
+<div class="ganador" id="ganadorBox">
+<h2>GANADOR</h2>
+<p id="ganadorNombre">---</p>
+<p id="ganadorNumero">---</p>
+</div>
+
+</div>
+
+<div class="footer">
+<div>
+Costo: $<input id="costo" value="100">
+</div>
+
+<div>
+Premios:
+<input value="5000">
+<input value="2000">
+</div>
+</div>
 
 <script>
 
-let precio = 100;
 let data = JSON.parse(localStorage.getItem("sorteo")) || {};
-
-function login(){
-if(document.getElementById("pin").value==="1234"){
-document.getElementById("login").style.display="none";
-document.getElementById("app").classList.remove("hidden");
-init();
-}
-}
+let costo = 100;
 
 function init(){
 crearGrid();
-crearInputs();
 render();
 }
 
 function crearGrid(){
-let grid=document.getElementById("grid");
-grid.innerHTML="";
+let g=document.getElementById("grid");
+g.innerHTML="";
+
 for(let i=0;i<100;i++){
+
 let d=document.createElement("div");
 d.className="cell";
-d.id="c"+i;
 d.innerHTML=i;
-grid.appendChild(d);
-}
-}
 
-function crearInputs(){
-let inputs=document.getElementById("inputs");
-inputs.innerHTML="";
-for(let i=0;i<100;i++){
-let div=document.createElement("div");
+d.onclick=()=>{
+let nombre=prompt("Nombre:");
 
-let inp=document.createElement("input");
-inp.placeholder=i;
-inp.value=data[i]?.nombre || "";
-inp.oninput=()=>{
-data[i]={...data[i],nombre:inp.value};
+if(nombre){
+data[i]={nombre:nombre,pagado:true};
 guardar();
 render();
+}
 };
 
-let pay=document.createElement("button");
-pay.innerHTML="$";
-pay.className="pay";
-pay.onclick=()=>{
-data[i]=data[i]||{};
-data[i].pagado=!data[i].pagado;
-if(data[i].pagado) generarTicket(i);
-guardar();
-render();
-};
-
-div.appendChild(inp);
-div.appendChild(pay);
-inputs.appendChild(div);
+g.appendChild(d);
 }
 }
 
 function render(){
-let pagados=0;
-let total=0;
 
-for(let i=0;i<100;i++){
-let c=document.getElementById("c"+i);
+let lista=document.getElementById("lista");
+lista.innerHTML="";
+
+document.querySelectorAll(".cell").forEach((c,i)=>{
+
 c.className="cell";
 
-let val=data[i];
-
-if(val?.nombre){
-c.innerHTML=i+"<br>"+val.nombre;
-}
-
-if(val?.pagado){
+if(data[i]){
+c.innerHTML=i+"<br>"+data[i].nombre;
 c.classList.add("paid");
-pagados++;
-total+=precio;
-}
+
+lista.innerHTML+=`
+<div class="item">
+<span>${data[i].nombre}</span>
+<span>${i}</span>
+</div>
+`;
 }
 
-document.getElementById("pagados").innerText=pagados;
-document.getElementById("total").innerText=total;
+});
+
 }
 
 function guardar(){
 localStorage.setItem("sorteo",JSON.stringify(data));
-}
-
-function reset(){
-localStorage.clear();
-location.reload();
 }
 
 function nuevo(){
@@ -254,42 +241,28 @@ location.reload();
 }
 
 function ganador(){
-let keys=Object.keys(data).filter(k=>data[k].pagado);
+
+let keys=Object.keys(data);
+
 let g=keys[Math.floor(Math.random()*keys.length)];
-alert("Ganador: "+g);
-}
 
-function generarTicket(num){
-let t=document.getElementById("ticket");
-let d=data[num];
+document.getElementById("ganadorNombre").innerText=data[g].nombre;
+document.getElementById("ganadorNumero").innerText=g;
 
-t.innerHTML=`
-<div class="ticket">
-<h2>SORTEOS ⚡</h2>
-<h3>Número: ${num}</h3>
-<p>${d.nombre}</p>
-<p>PAGADO ✅</p>
-</div>
-`;
+document.querySelectorAll(".cell")[g].classList.add("winner");
 
-t.classList.remove("hidden");
-
-html2canvas(t).then(canvas=>{
-let link=document.createElement("a");
-link.download="boleto.png";
-link.href=canvas.toDataURL();
-link.click();
-});
 }
 
 function exportar(){
-html2canvas(document.getElementById("grid")).then(canvas=>{
+html2canvas(document.body).then(canvas=>{
 let link=document.createElement("a");
-link.download="tabla.png";
+link.download="sorteo.png";
 link.href=canvas.toDataURL();
 link.click();
 });
 }
+
+init();
 
 </script>
 
