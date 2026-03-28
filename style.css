@@ -1,7 +1,7 @@
 body{
 margin:0;
 font-family: 'Segoe UI', sans-serif;
-background: radial-gradient(circle at top, #1a1a1a, #000);
+background:#050505;
 color:white;
 }
 
@@ -10,10 +10,9 @@ color:white;
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:15px 25px;
-background:linear-gradient(90deg,#000,#111);
+padding:15px 20px;
+background:linear-gradient(90deg,#000,#0a0a0a);
 border-bottom:1px solid #d4af37;
-box-shadow:0 0 20px #000;
 }
 
 .logo-area{
@@ -26,89 +25,88 @@ font-size:18px;
 }
 
 .logo-area img{
-width:45px;
-filter:drop-shadow(0 0 5px gold);
+width:40px;
+filter:drop-shadow(0 0 6px gold);
 }
 
+/* BOTONES */
 .menu button{
-background:linear-gradient(145deg,#d4af37,#b8962e);
+background:#d4af37;
+color:#000;
 border:none;
-padding:10px 15px;
-margin:5px;
+padding:8px 14px;
 border-radius:10px;
-cursor:pointer;
 font-weight:bold;
-box-shadow:0 0 10px #000;
-transition:0.2s;
+cursor:pointer;
+transition:.2s;
 }
 
 .menu button:hover{
 transform:scale(1.05);
-box-shadow:0 0 15px gold;
+box-shadow:0 0 10px gold;
 }
 
-/* TOP */
+/* TITULO */
 .top{
 text-align:center;
-padding:20px;
+padding:20px 10px;
 }
 
 .top h1{
-color:#d4af37;
 font-size:32px;
-text-shadow:0 0 10px gold;
+color:#ffd700;
+text-shadow:0 0 12px #ffd700;
 }
 
 .top p{
-opacity:0.8;
-margin-bottom:15px;
+opacity:.7;
 }
 
+/* INPUTS */
 .config input{
 margin:5px;
 padding:10px;
 border-radius:10px;
-border:none;
-background:#111;
-color:white;
 border:1px solid #333;
+background:#0a0a0a;
+color:white;
 }
 
-/* MAIN */
+/* LAYOUT */
 main{
 display:flex;
-gap:20px;
-padding:10px;
 }
 
-/* GRID */
+/* GRID PRINCIPAL */
 .grid{
 display:grid;
 grid-template-columns:repeat(10,1fr);
-gap:10px;
-padding:10px;
+gap:8px;
+padding:15px;
 flex:3;
 }
 
+/* CELDAS */
 .cell{
-padding:12px;
-text-align:center;
 border-radius:12px;
-cursor:pointer;
-background:#111;
-transition:0.2s;
+padding:12px 5px;
+text-align:center;
 font-weight:bold;
-box-shadow:inset 0 0 5px #000;
+cursor:pointer;
+transition:.2s;
+background:#0a0a0a;
+border:1px solid #1a1a1a;
 }
 
+/* EFECTO HOVER */
 .cell:hover{
-transform:scale(1.05);
-box-shadow:0 0 10px #d4af37;
+transform:scale(1.08);
+box-shadow:0 0 8px gold;
 }
 
 /* ESTADOS */
 .libre{
-background:#f3f3f3;
+background:#ffffff;
 color:#000;
 }
 
@@ -119,40 +117,41 @@ box-shadow:0 0 10px #facc15;
 }
 
 .pagado{
-background:#22c55e;
-box-shadow:0 0 10px #22c55e;
+background:#16a34a;
+color:white;
+box-shadow:0 0 12px #16a34a;
 }
 
+/* GANADOR */
 .ganador{
 border:2px solid gold;
 box-shadow:0 0 15px gold;
 }
 
-/* SIDE PANEL */
+/* PANEL DERECHO */
 .side{
 flex:1;
-padding:10px;
-background:#0a0a0a;
-border-left:1px solid #333;
-border-radius:15px;
+padding:15px;
+background:#070707;
+border-left:1px solid #222;
 }
 
+/* TITULOS */
 .side h3{
 color:#d4af37;
-border-bottom:1px solid #333;
-padding-bottom:5px;
+margin-top:10px;
 }
 
 /* LISTA */
 #lista div{
-background:#111;
-margin:5px 0;
+background:#0f0f0f;
 padding:8px;
+margin:5px 0;
 border-radius:8px;
 border:1px solid #222;
 }
 
-/* GANADOR */
+/* GANADOR BOX */
 #ganadorBox{
 margin-top:10px;
 padding:15px;
@@ -160,15 +159,22 @@ background:linear-gradient(145deg,#111,#000);
 border-radius:12px;
 text-align:center;
 border:1px solid gold;
-box-shadow:0 0 15px rgba(212,175,55,0.4);
 }
 
 #ganadorBox h2{
-color:#d4af37;
+color:#ffd700;
+font-size:22px;
 margin:0;
-font-size:24px;
 }
 
-#ganadorBox p{
-opacity:0.8;
+/* RESPONSIVE */
+@media(max-width:900px){
+main{
+flex-direction:column;
+}
+
+.side{
+border-left:none;
+border-top:1px solid #222;
+}
 }
