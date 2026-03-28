@@ -8,13 +8,13 @@
 <link rel="stylesheet" href="style.css">
 <script defer src="app.js"></script>
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
 </head>
 
 <body>
 
 <header class="header">
   <div class="logo-area">
+    <!-- CAMBIA ESTA URL POR TU LOGO -->
     <img src="https://i.imgur.com/8Km9tLL.png">
     <span>RAI HERNÁNDEZ</span>
   </div>
@@ -27,34 +27,28 @@
 </header>
 
 <section class="top">
+  <h1>SORTEOS ⚡</h1>
+  <p>Participa. Confía. Gana.</p>
 
-<h1>SORTEOS ⚡</h1>
-
-<p>Participa. Confía. Gana.</p>
-
-<div class="config">
-  <input id="titulo" placeholder="Nombre del sorteo">
-  <input id="costo" placeholder="Costo">
-  <input id="p1" placeholder="1er premio">
-  <input id="p2" placeholder="2do premio">
-</div>
-
+  <div class="config">
+    <input id="titulo" placeholder="Nombre del sorteo">
+    <input id="costo" placeholder="Costo">
+    <input id="p1" placeholder="1er premio">
+    <input id="p2" placeholder="2do premio">
+    <textarea id="desc" placeholder="Descripción"></textarea>
+  </div>
 </section>
 
 <main>
+  <div class="grid" id="grid"></div>
 
-<div class="grid" id="grid"></div>
+  <div class="side">
+    <h3>Participantes</h3>
+    <div id="lista"></div>
 
-<div class="side">
-
-<h3>Participantes</h3>
-<div id="lista"></div>
-
-<h3>Ganador</h3>
-<div id="ganadorBox"></div>
-
-</div>
-
+    <h3>Ganador</h3>
+    <div id="ganadorBox"></div>
+  </div>
 </main>
 
 </body>
