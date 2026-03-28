@@ -1,707 +1,452 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><!DOCTYPE html>
-<html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>SORTEOS ⚡️ PRO</title>
-<style>
-body {font-family: Arial; background:#0f172a; color:white; text-align:center;}
-h1 {color:#22c55e;}
-.grid {display:grid; grid-template-columns: repeat(10, 1fr); gap:5px; max-width:500px; margin:auto;}
-.cell {background:white; color:black; padding:10px; border-radius:6px; cursor:pointer; font-size:12px;}
-.paid {background:#22c55e; color:white;}
-.reserved {background:#facc15;}
-input, button {padding:10px; margin:5px; border-radius:6px; border:none;}
-button {background:#22c55e; color:white; cursor:pointer;}
-</style>
-</head>
-<body>
-
-<h1>SORTEOS ⚡️</h1>
-<p>participa. Juega. Gana</p>
-
-<input id="nombre" placeholder="Nombre del participante">
-
-<div class="grid" id="grid"></div>
-
-<br>
-<button onclick="sortear()">🎲 Generar ganador</button>
-
-<h2 id="ganador"></h2>
-
-<script>
-let data = {};
-const grid = document.getElementById("grid");
-
-for(let i=0;i<100;i++){
-  let num = i.toString().padStart(2,"0");
-  let div = document.createElement("div");
-  div.className="cell";
-  div.innerText=num;
-
-  div.onclick=()=>{
-    let nombre = document.getElementById("nombre").value;
-    if(nombre==="") return alert("Escribe un nombre");
-
-    if(!data[num]){
-      data[num]={nombre, estado:"reserved"};
-      div.className="cell reserved";
-      div.innerText=num+"\n"+nombre;
-    }else if(data[num].estado==="reserved"){
-      data[num].estado="paid";
-      div.className="cell paid";
-    }else{
-      delete data[num];
-      div.className="cell";
-      div.innerText=num;
-    }
-  };
-
-  grid.appendChild(div);
-}
-
-function sortear(){
-  let pagados = Object.keys(data).filter(n=>data[n].estado==="paid");
-
-  if(pagados.length===0){
-    alert("No hay pagados");
-    return;
-  }
-
-  let ganador = pagados[Math.floor(Math.random()*pagados.length)];
-
-  document.getElementById("ganador").innerText =
-    "🏆 Ganador: " + data[ganador].nombre + " (" + ganador + ")";
-}
-</script>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>SORTEOS ⚡️ PRO</title>
-
-<style>
-body {
-  font-family: Arial;
-  background:#0f172a;
-  color:white;
-  text-align:center;
-}
-
-h1 {color:#22c55e;}
-
-.grid {
-  display:grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap:5px;
-  max-width:500px;
-  margin:auto;
-}
-
-.cell {
-  background:white;
-  color:black;
-  padding:10px;
-  border-radius:6px;
-  cursor:pointer;
-  font-size:12px;
-}
-
-.paid {background:#22c55e; color:white;}
-.reserved {background:#facc15;}
-
-input, button {
-  padding:10px;
-  margin:5px;
-  border-radius:6px;
-  border:none;
-}
-
-button {
-  background:#22c55e;
-  color:white;
-  cursor:pointer;
-}
-
-#ganador {
-  margin-top:20px;
-  font-size:20px;
-}
-</style>
-
-</head>
-<body>
-
-<h1>SORTEOS ⚡️</h1>
-<p>participa. Juega. Gana</p>
-
-<input id="nombre" placeholder="Nombre del participante">
-
-<div class="grid" id="grid"></div>
-
-<br>
-
-<button onclick="sortear()">🎲 Generar ganador</button>
-<button onclick="resetear()">🔄 Nuevo sorteo</button>
-
-<h2 id="ganador"></h2>
-
-<script>
-
-let data = {};
-const grid = document.getElementById("grid");
-
-for(let i=0;i<100;i++){
-  let num = i.toString().padStart(2,"0");
-
-  let div = document.createElement("div");
-  div.className="cell";
-  div.innerText=num;
-
-  div.onclick=()=>{
-    let nombre = document.getElementById("nombre").value;
-
-    if(nombre===""){
-      alert("Escribe un nombre");
-      return;
-    }
-
-    if(!data[num]){
-      data[num]={nombre, estado:"reserved"};
-      div.className="cell reserved";
-      div.innerText=num + "\n" + nombre;
-
-    }else if(data[num].estado==="reserved"){
-      data[num].estado="paid";
-      div.className="cell paid";
-
-    }else{
-      delete data[num];
-      div.className="cell";
-      div.innerText=num;
-    }
-  };
-
-  grid.appendChild(div);
-}
-
-function sortear(){
-
-  let pagados = Object.keys(data).filter(n=>data[n].estado==="paid");
-
-  if(pagados.length===0){
-    alert("No hay pagados");
-    return;
-  }
-
-  let resultado = document.getElementById("ganador");
-
-  resultado.innerHTML = "🎲 Sorteando...";
-
-  setTimeout(()=>{
-    let ganador = pagados[Math.floor(Math.random()*pagados.length)];
-
-    resultado.innerHTML =
-      "🏆 GANADOR 🏆<br><br>" +
-      data[ganador].nombre + "<br><br>Número: " + ganador;
-
-  },1500);
-}
-
-function resetear(){
-  location.reload();
-}
-
-</script>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>SORTEOS ⚡️ NIVEL DIOS</title>
-
-<style>
-body{font-family:Arial;background:#0f172a;color:white;text-align:center;margin:0}
-h1{color:#22c55e;margin-top:10px}
-.panel{margin:10px}
-input,button{padding:10px;margin:5px;border-radius:6px;border:none}
-button{background:#22c55e;color:white;cursor:pointer}
-.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;max-width:500px;margin:auto}
-.cell{background:white;color:black;padding:8px;border-radius:6px;cursor:pointer;font-size:11px;white-space:pre-line}
-.paid{background:#22c55e;color:white}
-.reserved{background:#facc15}
-#winners{margin-top:15px;font-size:18px}
-.ticket{display:none}
-</style>
-
-</head>
-<body>
-
-<h1>SORTEOS ⚡️</h1>
-<p>participa. Juega. Gana</p>
-
-<div class="panel">
-<input id="nombre" placeholder="Nombre">
-<input id="precio" value="100">
-<input id="premios" value="1">
-</div>
-
-<div class="grid" id="grid"></div>
-
-<br>
-
-<button onclick="sortear()">🎲 Generar ganador</button>
-<button onclick="exportar()">📲 Exportar ganador</button>
-<button onclick="exportarTabla()">📊 Exportar tabla</button>
-<button onclick="resetear()">🔄 Nuevo sorteo</button>
-
-<div id="winners"></div>
-
-<canvas id="canvas" width="600" height="600" style="display:none"></canvas>
-
-<script>
-
-let data = JSON.parse(localStorage.getItem("data")||"{}");
-let winners = JSON.parse(localStorage.getItem("winners")||"[]");
-
-const grid=document.getElementById("grid");
-
-function save(){
- localStorage.setItem("data",JSON.stringify(data));
- localStorage.setItem("winners",JSON.stringify(winners));
-}
-
-for(let i=0;i<100;i++){
- let num=i.toString().padStart(2,"0");
- let div=document.createElement("div");
- div.className="cell";
-
- if(data[num]){
-  div.innerText=num+"\n"+data[num].nombre;
-  div.classList.add(data[num].estado);
- }else{
-  div.innerText=num;
- }
-
- div.onclick=()=>{
-  let nombre=document.getElementById("nombre").value;
-  if(nombre===""){alert("Escribe nombre");return;}
-
-  if(!data[num]){
-   data[num]={nombre,estado:"reserved"};
-   div.className="cell reserved";
-   div.innerText=num+"\n"+nombre;
-
-  }else if(data[num].estado==="reserved"){
-   data[num].estado="paid";
-   div.className="cell paid";
-
-  }else{
-   delete data[num];
-   div.className="cell";
-   div.innerText=num;
-  }
-
-  save();
- };
-
- grid.appendChild(div);
-}
-
-function sortear(){
-
- let pagados=Object.keys(data).filter(n=>data[n].estado==="paid");
- if(pagados.length===0){alert("No hay pagados");return;}
-
- let cantidad=parseInt(document.getElementById("premios").value)||1;
-
- let panel=document.getElementById("winners");
- panel.innerHTML="🎲 Sorteando...";
-
- setTimeout(()=>{
-
-  winners=[];
-
-  for(let i=0;i<cantidad;i++){
-   let g=pagados[Math.floor(Math.random()*pagados.length)];
-   winners.push(g);
-  }
-
-  let html="🏆 GANADORES 🏆<br><br>";
-  winners.forEach((g,i)=>{
-   html+=(i+1)+"° "+data[g].nombre+" ("+g+")<br>";
-  });
-
-  panel.innerHTML=html;
-  save();
-
- },1500);
-}
-
-function exportar(){
-
- let canvas=document.getElementById("canvas");
- let ctx=canvas.getContext("2d");
-
- ctx.fillStyle="#0f172a";
- ctx.fillRect(0,0,600,600);
-
- ctx.fillStyle="#22c55e";
- ctx.font="28px Arial";
- ctx.fillText("SORTEOS ⚡️",170,50);
-
- ctx.fillStyle="white";
- ctx.font="20px Arial";
-
- winners.forEach((g,i)=>{
-  ctx.fillText((i+1)+"° "+data[g].nombre+" ("+g+")",60,150+(i*40));
- });
-
- let link=document.createElement("a");
- link.download="ganadores.png";
- link.href=canvas.toDataURL();
- link.click();
-}
-
-function exportarTabla(){
-
- let canvas=document.getElementById("canvas");
- let ctx=canvas.getContext("2d");
-
- ctx.fillStyle="white";
- ctx.fillRect(0,0,600,600);
-
- let x=20,y=20;
-
- for(let i=0;i<100;i++){
-  let num=i.toString().padStart(2,"0");
-
-  if(data[num]){
-   if(data[num].estado==="paid"){ctx.fillStyle="#22c55e";}
-   else{ctx.fillStyle="#facc15";}
-  }else{
-   ctx.fillStyle="#eee";
-  }
-
-  ctx.fillRect(x,y,50,40);
-
-  ctx.fillStyle="black";
-  ctx.font="10px Arial";
-  ctx.fillText(num, x+5, y+12);
-
-  if(data[num]){
-   ctx.fillText(data[num].nombre.substring(0,8), x+5, y+28);
-  }
-
-  x+=55;
-  if((i+1)%10===0){x=20;y+=45;}
- }
-
- let link=document.createElement("a");
- link.download="tabla.png";
- link.href=canvas.toDataURL();
- link.click();
-}
-
-function resetear(){
- if(confirm("¿Seguro?")){
-  localStorage.clear();
-  location.reload();
- }
-}
-
-</script>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>SORTEOS ⚡️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SORTEOS ⚡ ADMIN PRO</title>
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 <style>
-body{margin:0;font-family:Arial;background:#0f172a;color:white;}
-header{text-align:center;padding:10px;}
-.logo{width:90px;}
-.titulo{font-size:22px;font-weight:bold;}
-.slogan{font-size:13px;opacity:0.8;}
-.topbar{text-align:center;margin:10px;}
-button{padding:8px;margin:4px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;}
-.container{display:flex;}
-.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;width:60%;padding:10px;}
-.cell{background:white;color:black;text-align:center;padding:6px;border-radius:6px;font-size:11px;}
-.libre{background:white;}
-.apartado{background:#facc15;}
-.pagado{background:#22c55e;color:white;}
-.lista{width:40%;padding:10px;max-height:90vh;overflow:auto;}
-.item{display:flex;margin-bottom:5px;}
-.item input{flex:1;padding:5px;}
-.btn{background:#22c55e;color:white;}
+:root{
+  --bg:#020617; --card:#0b1220; --muted:#94a3b8;
+  --primary:#38bdf8; --green:#22c55e; --yellow:#facc15; --red:#ef4444; --gold:#f59e0b;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:var(--bg);color:#fff}
+header{padding:12px;text-align:center;border-bottom:1px solid #0f172a}
+.titulo{font-size:22px;font-weight:bold;color:var(--primary)}
+.slogan{font-size:12px;color:var(--muted)}
+
+.layout{display:flex;min-height:100vh}
+.sidebar{width:260px;background:#030712;border-right:1px solid #0f172a;padding:10px}
+.sidebar h3{margin:6px 0 10px 0;color:#cbd5f5}
+.sidebar button, .sidebar .itemS{
+  width:100%;padding:8px;border-radius:8px;margin:4px 0;border:none;cursor:pointer;
+}
+.itemS{background:#0b1220;text-align:left}
+.itemS.active{outline:2px solid var(--primary)}
+.sidebar .danger{background:#1f0a0a}
+.sidebar .primary{background:#0b2440}
+
+.main{flex:1;padding:10px}
+.topbar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:8px}
+.topbar button{padding:8px;border-radius:8px;border:none;cursor:pointer}
+
+.panel{display:flex;gap:10px;flex-wrap:wrap}
+.grid{
+  display:grid;gap:6px;padding:8px;background:#020617;border-radius:12px;
+}
+.cell{
+  background:#0b1220;border-radius:8px;padding:8px;text-align:center;font-size:12px;
+  min-height:38px;display:flex;align-items:center;justify-content:center;flex-direction:column;
+}
+.libre{background:#0b1220}
+.apartado{background:var(--yellow);color:#000}
+.pagado{background:var(--green)}
+.ganador{outline:3px solid gold;transform:scale(1.05)}
+
+.lista{
+  flex:1;min-width:260px;max-height:70vh;overflow:auto;background:#020617;border-radius:12px;padding:8px;
+}
+.item{display:flex;gap:6px;margin-bottom:6px}
+.item input{flex:1;padding:6px;border-radius:6px;border:none}
+.item button{padding:6px;border-radius:6px;border:none;cursor:pointer}
+
+.stats{margin:8px 0;text-align:center;color:#fde68a}
+.panelGan{margin:8px 0;text-align:center;color:gold}
+
+.hidden{display:none}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:10px}
+.modal .box{background:#020617;border:1px solid #0f172a;border-radius:12px;padding:12px;width:100%;max-width:520px}
+.modal .box h3{margin-top:0}
+.row{display:flex;gap:6px;flex-wrap:wrap}
+.row input{flex:1;padding:6px;border-radius:6px;border:none}
+.row button{padding:8px;border-radius:8px;border:none;cursor:pointer}
+
+/* Boleto */
+#boletoWrap{display:none;padding:20px;background:#000}
+.ticket{
+  max-width:420px;margin:auto;border-radius:20px;padding:16px;
+  background:linear-gradient(180deg,#000,#111);border:2px solid gold;box-shadow:0 0 20px gold;
+  text-align:center;color:#fff;
+}
+.ticket h2{color:gold;margin:4px 0}
+.ticket .num{font-size:58px;color:var(--green);font-weight:bold}
+.ticket .ok{background:var(--green);padding:8px;border-radius:10px;margin:10px 0;font-weight:bold}
+.small{font-size:12px;color:#cbd5f5}
+
+/* Login */
+#login{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center}
+#login .box{background:#020617;border:1px solid #0f172a;border-radius:12px;padding:16px;width:280px;text-align:center}
+#login input{width:100%;padding:8px;border-radius:8px;border:none;margin:8px 0}
 </style>
 </head>
 
 <body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="box">
+    <h3>SORTEOS ⚡ ADMIN</h3>
+    <div class="small">Ingresa PIN</div>
+    <input id="pin" type="password" placeholder="PIN (1234)">
+    <button onclick="login()">Entrar</button>
+  </div>
+</div>
 
 <header>
-<div class="titulo">SORTEOS ⚡️</div>
-<div class="slogan">participa. Juega. Gana</div>
+  <div class="titulo">SORTEOS ⚡</div>
+  <div class="slogan">Admin Panel Pro</div>
 </header>
 
-<div class="topbar">
-<button onclick="ganador()">🏆 Ganador</button>
-<button onclick="exportar()">📤 Exportar</button>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h3>Sorteos</h3>
+    <div id="listaSorteos"></div>
+    <button class="primary" onclick="abrirModalNuevo()">➕ Nuevo sorteo</button>
+    <button onclick="duplicar()">📄 Duplicar</button>
+    <button class="danger" onclick="eliminar()">🗑️ Eliminar</button>
+    <hr>
+    <button onclick="exportar()">📤 Exportar tabla</button>
+    <button onclick="resetear()">♻️ Reset actual</button>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <button onclick="ganador()">🏆 1 Ganador</button>
+      <button onclick="multi()">🥇🥈🥉 Multi</button>
+      <button onclick="boleto()">🎟️ Boleto</button>
+      <button onclick="config()">⚙️ Config</button>
+    </div>
+
+    <div id="stats" class="stats"></div>
+    <div id="panelGan" class="panelGan"></div>
+
+    <div class="panel">
+      <div id="grid" class="grid"></div>
+      <div id="lista" class="lista"></div>
+    </div>
+  </div>
 </div>
 
-<div class="container">
-<div class="grid" id="grid"></div>
-<div class="lista" id="lista"></div>
+<!-- MODAL CONFIG -->
+<div id="modalConfig" class="modal">
+  <div class="box">
+    <h3>Configuración</h3>
+    <div class="row">
+      <input id="cfgNombre" placeholder="Nombre del sorteo">
+      <input id="cfgCodigo" placeholder="Código (S-001)">
+    </div>
+    <div class="row">
+      <input id="cfgRango" placeholder="Rango (00-99 / 1-200)">
+      <input id="cfgPrecio" type="number" placeholder="Precio boleto">
+    </div>
+    <div class="row">
+      <input id="cfgPremios" placeholder="Premios (1:$5000,2:$2000)">
+    </div>
+    <div class="row">
+      <button onclick="guardarConfig()">Guardar</button>
+      <button onclick="cerrarModal('modalConfig')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NUEVO -->
+<div id="modalNuevo" class="modal">
+  <div class="box">
+    <h3>Nuevo sorteo</h3>
+    <div class="row">
+      <input id="nuevoNombre" placeholder="Nombre">
+      <input id="nuevoRango" placeholder="Rango (00-99)">
+    </div>
+    <div class="row">
+      <button onclick="crearSorteo()">Crear</button>
+      <button onclick="cerrarModal('modalNuevo')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOLETO -->
+<div id="boletoWrap">
+  <div class="ticket">
+    <h2>SORTEOS ⚡</h2>
+    <div class="small" id="tNombreS"></div>
+    <div class="num" id="tNum"></div>
+    <div id="tNom"></div>
+    <div class="ok">✔ PAGADO</div>
+    <div class="small" id="tFecha"></div>
+    <div class="small" id="tPremios"></div>
+    <p>¡Gracias por participar! ⚡</p>
+  </div>
 </div>
 
 <script>
-
-let data = {};
-
-function crearTabla(){
-    let grid = document.getElementById("grid");
-    let lista = document.getElementById("lista");
-
-    for(let i=0;i<100;i++){
-        let num = i.toString().padStart(2,'0');
-
-        data[num]={nombre:"",estado:"libre"};
-
-        let cell = document.createElement("div");
-        cell.className="cell libre";
-        cell.id="cell-"+num;
-        cell.innerHTML=num;
-
-        grid.appendChild(cell);
-
-        let item = document.createElement("div");
-
-        let input = document.createElement("input");
-        input.placeholder=num;
-
-        input.oninput=()=>{
-            data[num].nombre=input.value;
-            data[num].estado = input.value ? "apartado" : "libre";
-            actualizar(num);
-        };
-
-        let btn = document.createElement("button");
-        btn.innerHTML="💲";
-
-        btn.onclick=()=>{
-            if(data[num].nombre){
-                data[num].estado="pagado";
-                actualizar(num);
-            }
-        };
-
-        item.appendChild(input);
-        item.appendChild(btn);
-        lista.appendChild(item);
-    }
+// ====== LOGIN ======
+const ADMIN_PIN = "1234";
+function login(){
+  if(document.getElementById('pin').value===ADMIN_PIN){
+    document.getElementById('login').style.display='none';
+  }else alert('PIN incorrecto');
 }
 
-function actualizar(num){
-    let cell = document.getElementById("cell-"+num);
-    cell.className="cell "+data[num].estado;
-    cell.innerHTML = data[num].nombre ? num+"<br>"+data[num].nombre : num;
+// ====== STORAGE ======
+let DB = JSON.parse(localStorage.getItem('SORTEOS_DB')) || {
+  sorteos:{},
+  activo:null
+};
+
+function save(){ localStorage.setItem('SORTEOS_DB', JSON.stringify(DB)); }
+
+// ====== HELPERS ======
+function parseRango(r){
+  // "00-99" o "1-200"
+  let [a,b] = r.split('-').map(x=>x.trim());
+  let start = parseInt(a,10), end = parseInt(b,10);
+  let pad = a.length; // 2 para 00
+  let arr=[];
+  for(let i=start;i<=end;i++){
+    let s = i.toString();
+    if(pad>1) s = s.padStart(pad,'0');
+    arr.push(s);
+  }
+  return arr;
 }
 
-function ganador(){
-    let pagados = Object.keys(data).filter(n=>data[n].estado==="pagado");
-    if(pagados.length===0){
-        alert("No hay números pagados");
-        return;
-    }
-    let win = pagados[Math.floor(Math.random()*pagados.length)];
-    alert("Ganador: "+win+" - "+data[win].nombre);
+// ====== SORTER MGMT ======
+function renderListaS(){
+  let cont = document.getElementById('listaSorteos');
+  cont.innerHTML='';
+  Object.keys(DB.sorteos).forEach(id=>{
+    let it = document.createElement('div');
+    it.className='itemS'+(DB.activo===id?' active':'');
+    it.innerHTML = DB.sorteos[id].config.nombre || id;
+    it.onclick=()=>{ DB.activo=id; save(); cargar(); renderListaS(); };
+    cont.appendChild(it);
+  });
 }
 
-function exportar(){
-    html2canvas(document.body).then(canvas=>{
-        let link=document.createElement("a");
-        link.download="sorteo.png";
-        link.href=canvas.toDataURL();
-        link.click();
-    });
-}
-
-crearTabla();
-
-</script>
-
-</body>
-</html>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SORTEOS ⚡️ PRO</title>
-
-<style>
-body{background:#0f0f0f;color:white;font-family:Arial;text-align:center}
-h1{color:#f5d76e}
-.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;padding:10px}
-.cell{padding:10px;background:#222;border-radius:5px;font-size:12px}
-.paid{background:#16a34a}
-.reserved{background:#f59e0b}
-.multi{background:#2563eb}
-input{padding:10px;margin:5px;border-radius:5px;border:none}
-button{padding:10px;margin:5px;border-radius:5px;border:none;background:#f5d76e}
-.ticket{background:white;color:black;padding:10px;border-radius:10px;margin:10px}
-</style>
-
-</head>
-
-<body>
-
-<h1>SORTEOS ⚡️</h1>
-<p>participa. Juega. Gana</p>
-<p>🏆 1er $5000 | 🥈 $2000 | 🎟️ $500</p>
-
-<input id="name" placeholder="Nombre del participante">
-
-<div class="grid" id="grid"></div>
-
-<button onclick="ganador()">🎯 Generar ganador</button>
-
-<h2 id="res"></h2>
-<div id="ticket"></div>
-
-<script>
-let data={}
-let grid=document.getElementById("grid")
-
-for(let i=0;i<100;i++){
-let num=i.toString().padStart(2,"0")
-let d=document.createElement("div")
-d.className="cell"
-d.innerText=num
-
-d.onclick=()=>{
-let name=document.getElementById("name").value
-if(!name){alert("Escribe nombre");return}
-
-if(!data[num]){
-data[num]=[name]
-d.classList.add("reserved")
-d.innerText=num+"\n"+name
-}
-else{
-data[num].push(name)
-d.classList.remove("reserved")
-d.classList.add("multi")
-d.innerText=num+"\n🐮 "+data[num].join("/")
-}
-}
-
-d.ondblclick=()=>{
-if(data[num]){
-d.classList.remove("reserved","multi")
-d.classList.add("paid")
-}
-}
-
-grid.appendChild(d)
-}
-
-function ganador(){
-let cells=[...document.querySelectorAll(".paid")]
-if(cells.length==0){alert("No hay pagados");return}
-
-let win=cells[Math.floor(Math.random()*cells.length)]
-let num=win.innerText.split("\n")[0]
-let name=win.innerText.split("\n")[1]||""
-
-document.getElementById("res").innerText="🏆 GANADOR: "+num
-
-document.getElementById("ticket").innerHTML=`
-<div class="ticket">
-<h2>🏆 GANADOR</h2>
-<p><b>Número:</b> ${num}</p>
-<p><b>Nombre:</b> ${name}</p>
-<p>SORTEOS ⚡️</p>
-</div>
-`
-}
-</script>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>SORTEOS ⚡️</title>
-<style>
-body {font-family: Arial; background:#0f172a; color:white; text-align:center;}
-h1 {color:#22c55e;}
-.grid {display:grid; grid-template-columns: repeat(10, 1fr); gap:5px; max-width:500px; margin:auto;}
-.cell {background:white; color:black; padding:10px; border-radius:6px; cursor:pointer;}
-.paid {background:#22c55e; color:white;}
-.reserved {background:#facc15;}
-input, button {padding:10px; margin:5px; border-radius:6px; border:none;}
-button {background:#22c55e; color:white; cursor:pointer;}
-</style>
-</head>
-<body>
-
-<h1>SORTEOS ⚡️</h1>
-<p>participa. Juega. Gana</p>
-
-<input id="nombre" placeholder="Nombre">
-<button onclick="setModo('paid')">Pagado</button>
-<button onclick="setModo('reserved')">Apartado</button>
-<button onclick="setModo('free')">Libre</button>
-
-<div class="grid" id="grid"></div>
-
-<br>
-<button onclick="sortear()">🎲 Elegir ganador</button>
-
-<h2 id="ganador"></h2>
-
-<script>
-let modo = "paid";
-let data = {};
-
-function setModo(m){modo = m;}
-
-const grid = document.getElementById("grid");
-
-for(let i=0;i<100;i++){
-  let num = i.toString().padStart(2,"0");
-  let div = document.createElement("div");
-  div.className="cell";
-  div.innerText=num;
-  div.onclick=()=>{
-    let nombre = document.getElementById("nombre").value;
-    if(modo==="free"){
-      delete data[num];
-      div.className="cell";
-      div.innerText=num;
-      return;
-    }
-    if(nombre==="") return alert("Pon un nombre");
-    data[num]={nombre, estado:modo};
-    div.innerText=num+"\n"+nombre;
-    div.className="cell "+modo;
+function abrirModalNuevo(){ abrirModal('modalNuevo'); }
+function crearSorteo(){
+  let nombre = document.getElementById('nuevoNombre').value || 'SORTEO';
+  let rango = document.getElementById('nuevoRango').value || '00-99';
+  let id = 'S-'+Date.now();
+  DB.sorteos[id]={
+    config:{nombre,codigo:id,rango,precio:100,premios:"1:$5000,2:$2000"},
+    data:{},
+    winners:[]
   };
-  grid.appendChild(div);
+  DB.activo=id;
+  save(); cerrarModal('modalNuevo'); cargar(); renderListaS();
+}
+function eliminar(){
+  if(!DB.activo) return;
+  if(confirm('Eliminar sorteo?')){
+    delete DB.sorteos[DB.activo];
+    DB.activo = Object.keys(DB.sorteos)[0] || null;
+    save(); cargar(); renderListaS();
+  }
+}
+function duplicar(){
+  if(!DB.activo) return;
+  let base = DB.sorteos[DB.activo];
+  let id = 'S-'+Date.now();
+  DB.sorteos[id] = JSON.parse(JSON.stringify(base));
+  DB.sorteos[id].config.codigo = id;
+  DB.activo=id; save(); cargar(); renderListaS();
 }
 
-function sortear(){
-  let pagados = Object.keys(data).filter(n=>data[n].estado==="paid");
-  if(pagados.length===0) return alert("No hay pagados");
-  let ganador = pagados[Math.floor(Math.random()*pagados.length)];
-  document.getElementById("ganador").innerText =
-    "🏆 Ganador: "+data[ganador].nombre+" ("+ganador+")";
+// ====== CONFIG ======
+function config(){
+  if(!DB.activo) return;
+  let c = DB.sorteos[DB.activo].config;
+  document.getElementById('cfgNombre').value=c.nombre||'';
+  document.getElementById('cfgCodigo').value=c.codigo||'';
+  document.getElementById('cfgRango').value=c.rango||'00-99';
+  document.getElementById('cfgPrecio').value=c.precio||100;
+  document.getElementById('cfgPremios').value=c.premios||'';
+  abrirModal('modalConfig');
 }
+function guardarConfig(){
+  let c = DB.sorteos[DB.activo].config;
+  c.nombre = document.getElementById('cfgNombre').value;
+  c.codigo = document.getElementById('cfgCodigo').value;
+  c.rango = document.getElementById('cfgRango').value;
+  c.precio = parseFloat(document.getElementById('cfgPrecio').value)||100;
+  c.premios = document.getElementById('cfgPremios').value;
+  save(); cerrarModal('modalConfig'); cargar(); renderListaS();
+}
+
+// ====== UI CORE ======
+function cargar(){
+  let grid = document.getElementById('grid');
+  let lista = document.getElementById('lista');
+  let stats = document.getElementById('stats');
+  let panel = document.getElementById('panelGan');
+
+  grid.innerHTML=''; lista.innerHTML=''; panel.innerHTML='';
+
+  if(!DB.activo){ stats.innerHTML='Crea un sorteo'; return; }
+
+  let S = DB.sorteos[DB.activo];
+  let nums = parseRango(S.config.rango||'00-99');
+
+  // ajustar columnas dinámicas
+  let cols = Math.min(10, Math.ceil(Math.sqrt(nums.length)));
+  grid.style.gridTemplateColumns = `repeat(${cols},1fr)`;
+
+  nums.forEach(n=>{
+    if(!S.data[n]) S.data[n]={nombre:"",estado:"libre"};
+
+    // cell
+    let c = document.createElement('div');
+    c.id='c'+n; c.className='cell';
+    grid.appendChild(c);
+
+    // list item
+    let it = document.createElement('div'); it.className='item';
+    let inp = document.createElement('input');
+    inp.placeholder=n; inp.value=S.data[n].nombre||'';
+    inp.oninput=()=>{
+      S.data[n].nombre=inp.value;
+      S.data[n].estado = inp.value ? 'apartado':'libre';
+      update(n);
+    };
+    let b = document.createElement('button'); b.innerHTML='💲';
+    b.onclick=()=>{
+      if(S.data[n].nombre){
+        S.data[n].estado='pagado'; update(n);
+      }
+    };
+    it.appendChild(inp); it.appendChild(b); lista.appendChild(it);
+
+    update(n);
+  });
+
+  statsUpdate();
+  save();
+}
+
+function update(n){
+  let S = DB.sorteos[DB.activo];
+  let c = document.getElementById('c'+n);
+  if(!c) return;
+
+  c.className='cell '+S.data[n].estado;
+
+  let txt=n;
+  if(S.data[n].nombre){
+    txt+="<br>"+S.data[n].nombre;
+    if(S.data[n].nombre.includes('/')) txt+=" 🐮";
+  }
+  c.innerHTML=txt;
+
+  if(S.winners.includes(n)) c.classList.add('ganador');
+
+  save(); statsUpdate();
+}
+
+// ====== STATS ======
+function statsUpdate(){
+  if(!DB.activo) return;
+  let S = DB.sorteos[DB.activo];
+  let p = Object.values(S.data).filter(x=>x.estado==='pagado').length;
+  let total = p * (S.config.precio||100);
+  let premios = S.config.premios||'1:$5000,2:$2000';
+  // estimación simple: suma de premios numéricos
+  let sumPrem = (premios.match(/\d+(?:\.\d+)?/g)||[]).map(Number).reduce((a,b)=>a+b,0);
+  let gan = total - sumPrem;
+
+  document.getElementById('stats').innerHTML =
+    `Pagados: ${p} | Total: $${total} | Premios: $${sumPrem} | Ganancia: $${gan}`;
+}
+
+// ====== GANADORES ======
+function ganador(){
+  if(!DB.activo) return;
+  let S = DB.sorteos[DB.activo];
+  let p = Object.keys(S.data).filter(n=>S.data[n].estado==='pagado');
+  if(!p.length) return alert('Sin pagados');
+
+  let w = p[Math.floor(Math.random()*p.length)];
+  S.winners=[w];
+  document.getElementById('panelGan').innerHTML=`🏆 ${w} - ${S.data[w].nombre}`;
+  update(w);
+}
+function multi(){
+  if(!DB.activo) return;
+  let S = DB.sorteos[DB.activo];
+  let p = Object.keys(S.data).filter(n=>S.data[n].estado==='pagado');
+  if(p.length<3) return alert('Mínimo 3 pagados');
+
+  S.winners=[];
+  for(let i=0;i<3;i++){
+    let w = p[Math.floor(Math.random()*p.length)];
+    S.winners.push(w);
+  }
+  document.getElementById('panelGan').innerHTML =
+    `🥇 ${S.winners[0]}<br>🥈 ${S.winners[1]}<br>🥉 ${S.winners[2]}`;
+  S.winners.forEach(update);
+}
+
+// ====== BOLETO ======
+function boleto(){
+  if(!DB.activo) return;
+  let S = DB.sorteos[DB.activo];
+  let p = Object.keys(S.data).filter(n=>S.data[n].estado==='pagado');
+  if(!p.length) return alert('Sin pagados');
+
+  let n = p[p.length-1];
+  document.getElementById('tNombreS').innerText = S.config.nombre||'SORTEO';
+  document.getElementById('tNum').innerText = n;
+  document.getElementById('tNom').innerText = S.data[n].nombre;
+  document.getElementById('tFecha').innerText = new Date().toLocaleString();
+  document.getElementById('tPremios').innerText = S.config.premios||'';
+
+  let wrap = document.getElementById('boletoWrap');
+  wrap.style.display='block';
+
+  html2canvas(wrap).then(c=>{
+    let a=document.createElement('a');
+    a.download='boleto.png';
+    a.href=c.toDataURL();
+    a.click();
+    wrap.style.display='none';
+  });
+}
+
+// ====== EXPORT / RESET ======
+function exportar(){
+  html2canvas(document.body).then(c=>{
+    let a=document.createElement('a');
+    a.download='tabla.png';
+    a.href=c.toDataURL();
+    a.click();
+  });
+}
+function resetear(){
+  if(!DB.activo) return;
+  if(confirm('Resetear sorteo actual?')){
+    DB.sorteos[DB.activo].data={};
+    DB.sorteos[DB.activo].winners=[];
+    save(); cargar();
+  }
+}
+
+// ====== MODALS ======
+function abrirModal(id){ document.getElementById(id).style.display='flex'; }
+function cerrarModal(id){ document.getElementById(id).style.display='none'; }
+
+// ====== INIT ======
+if(!DB.activo && Object.keys(DB.sorteos).length){
+  DB.activo = Object.keys(DB.sorteos)[0];
+}
+renderListaS();
+cargar();
 </script>
 
 </body>
