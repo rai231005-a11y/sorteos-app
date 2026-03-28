@@ -1,87 +1,80 @@
-body{
-margin:0;
-font-family:Arial;
-background:#050505;
-color:white;
+let modo = "apartado";
+let data = [];
+
+function crearSorteo(tipo){
+  document.getElementById("home").classList.remove("active");
+  document.getElementById("panel").classList.add("active");
+
+  generarGrid(100);
 }
 
-.header{
-display:flex;
-justify-content:space-between;
-padding:15px;
-border-bottom:1px solid gold;
+function setModo(m){
+  modo = m;
 }
 
-.logo-area{
-display:flex;
-align-items:center;
-gap:10px;
-color:gold;
+function generarGrid(n){
+  data = Array(n).fill(null);
+  const grid = document.getElementById("grid");
+  grid.innerHTML="";
+
+  for(let i=0;i<n;i++){
+    let div = document.createElement("div");
+    div.className="cell";
+    div.innerText=i.toString().padStart(2,"0");
+
+    div.onclick=()=>clickNumero(i);
+
+    grid.appendChild(div);
+  }
 }
 
-.logo-area img{width:40px;}
+function clickNumero(i){
+  let nombre = document.getElementById("nombre").value;
 
-.menu button{
-background:gold;
-border:none;
-padding:8px;
-margin:3px;
-border-radius:8px;
-cursor:pointer;
+  if(!nombre) return alert("Escribe nombre");
+
+  if(data[i]){
+    data[i].nombre += " / " + nombre;
+  }else{
+    data[i]={nombre:nombre,estado:modo};
+  }
+
+  if(modo==="pagado"){
+    generarBoleto(i);
+  }
+
+  render();
 }
 
-.top{text-align:center;padding:10px;}
+function render(){
+  const cells = document.querySelectorAll(".cell");
+  const lista = document.getElementById("lista");
+  lista.innerHTML="";
 
-.config input, .config textarea{
-margin:5px;
-padding:8px;
-border-radius:8px;
-border:none;
+  data.forEach((d,i)=>{
+    let c = cells[i];
+    c.className="cell";
+
+    if(d){
+      c.innerHTML=`${i}<br>${d.nombre}`;
+
+      if(d.estado==="apartado") c.classList.add("apartado");
+      if(d.estado==="pagado") c.classList.add("pagado");
+
+      lista.innerHTML+=`<div>${i} - ${d.nombre}</div>`;
+    }
+  });
 }
 
-main{display:flex;}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(10,1fr);
-gap:6px;
-padding:10px;
-flex:3;
+function generarBoleto(i){
+  alert("Boleto generado: "+i);
 }
 
-.cell{
-padding:10px;
-text-align:center;
-border-radius:10px;
-cursor:pointer;
-background:#111;
-}
-
-.libre{background:white;color:black;}
-.apartado{background:#facc15;color:black;}
-.pagado{background:#22c55e;}
-.ganador{border:2px solid gold;}
-
-.cell button{
-margin-top:5px;
-padding:3px 6px;
-border:none;
-border-radius:6px;
-background:black;
-color:white;
-}
-
-.side{flex:1;padding:10px;}
-
-#lista div{margin:5px 0;}
-
-#ganadorBox{
-margin-top:10px;
-padding:10px;
-border:1px solid gold;
-text-align:center;
-}
-
-#stats{
-margin-top:10px;
+function exportar(){
+  html2canvas(document.body).then(canvas=>{
+    let a=document.createElement("a");
+    a.href=canvas.toDataURL();
+    a.download="sorteo.png";
+    a.click();
+  });
 }
