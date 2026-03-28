@@ -3,320 +3,338 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>SORTEOS ⚡ PRO</title>
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 <style>
+:root{
+--gold:#d4af37;
+--gold2:#ffcc66;
+--bg:#0a0a0a;
+--card:#111;
+--soft:#1a1a1a;
+--green:#22c55e;
+--yellow:#facc15;
+--white:#ffffff;
+}
+
+*{box-sizing:border-box}
 
 body{
 margin:0;
-font-family:Arial;
-background:#0a0a0a;
-color:white;
+font-family:Arial, Helvetica, sans-serif;
+background:linear-gradient(180deg,#000,#0a0a0a 40%,#000);
+color:#fff;
 }
 
 /* HEADER */
 .header{
-background:black;
-padding:20px;
 display:flex;
-justify-content:space-between;
 align-items:center;
-border-bottom:2px solid gold;
+justify-content:space-between;
+padding:14px 16px;
+border-bottom:1px solid rgba(212,175,55,.3);
+background:#000;
+position:sticky;top:0;z-index:5;
 }
-
+.header .left{display:flex;align-items:center;gap:10px}
 .logo{
-height:50px;
+width:42px;height:42px;border-radius:8px;
+object-fit:cover;
+box-shadow:0 0 20px rgba(212,175,55,.4);
 }
-
-.title{
-font-size:28px;
-color:gold;
+.brand{
 font-weight:bold;
+letter-spacing:.5px;
+color:var(--gold);
 }
-
-/* PANEL */
-.top{
-padding:10px;
-text-align:center;
-}
-
+.actions{display:flex;gap:8px}
 .btn{
-background:linear-gradient(45deg,#ffd700,#ff9900);
+background:linear-gradient(45deg,#b8942e,#ffcc66);
 border:none;
-padding:10px 15px;
+padding:8px 12px;
 border-radius:10px;
-margin:5px;
+color:#000;
+font-weight:bold;
 cursor:pointer;
+box-shadow:0 6px 16px rgba(212,175,55,.25);
+}
+
+/* TOP INFO */
+.top{
+padding:14px;
+text-align:center;
+border-bottom:1px solid rgba(212,175,55,.2);
+}
+.title{
+font-size:22px;
+color:var(--gold);
 font-weight:bold;
 }
+.sub{opacity:.85;margin-top:4px}
+
+.config{
+display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px;
+}
+.input{
+background:#0f0f0f;
+border:1px solid rgba(212,175,55,.25);
+border-radius:10px;
+padding:8px 10px;
+color:#fff;
+}
+
+/* FILTERS */
+.filters{
+display:flex;gap:6px;justify-content:center;margin-top:10px;
+}
+.pill{
+padding:6px 10px;border-radius:999px;font-size:12px;
+background:#222;border:1px solid #333
+}
+.pill.green{background:#143d2a;border-color:#1f6b49}
+.pill.yellow{background:#3b2f07;border-color:#8a6b00}
 
 /* GRID */
+.wrap{padding:12px}
 .grid{
 display:grid;
 grid-template-columns:repeat(10,1fr);
 gap:6px;
-padding:10px;
 }
-
 .cell{
-padding:12px;
 border-radius:10px;
+padding:10px 6px;
 text-align:center;
 font-weight:bold;
 cursor:pointer;
-transition:0.2s;
+transition:.15s;
+background:#0f0f0f;
+border:1px solid #222;
+min-height:44px;
+display:flex;flex-direction:column;justify-content:center;align-items:center;
 }
+.cell small{font-size:10px;opacity:.9}
+.cell:hover{transform:translateY(-1px)}
 
-/* ESTADOS */
-.libre{
-background:#ffffff;
-color:#000;
+.libre{background:#fff;color:#000}
+.apartado{background:var(--yellow);color:#000}
+.pagado{background:var(--green);color:#fff}
+.ganador{outline:3px solid var(--gold);box-shadow:0 0 16px rgba(212,175,55,.6)}
+
+/* FOOT LEGEND */
+.legend{
+display:flex;gap:10px;justify-content:center;margin:12px 0;
 }
-
-.apartado{
-background:#facc15;
-color:#000;
+.legend span{
+padding:6px 10px;border-radius:8px;font-size:12px
 }
+.l1{background:#fff;color:#000}
+.l2{background:var(--yellow);color:#000}
+.l3{background:var(--green);color:#fff}
 
-.pagado{
-background:#16a34a;
-color:white;
-}
-
-.ganador{
-background:gold;
-color:black;
-}
-
-/* INFO */
-.info{
-text-align:center;
-margin-top:10px;
-}
-
-input{
-padding:8px;
-margin:5px;
-border-radius:8px;
-border:none;
-}
-
-/* EXPORT */
-.export-box{
-background:black;
-color:white;
-padding:30px;
+/* EXPORT CARD */
+.export-root{
+width:1000px;
+padding:26px;
+background:radial-gradient(1200px 500px at 50% 0%, rgba(212,175,55,.15), transparent 60%), #000;
+color:#fff;
 font-family:Arial;
-width:900px;
+border:2px solid rgba(212,175,55,.4);
+border-radius:18px;
 }
-
-.gold{
-color:gold;
-font-weight:bold;
+.export-header{
+display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;
 }
-
+.export-title{
+font-size:28px;color:var(--gold);font-weight:bold;
+}
+.export-sub{opacity:.9}
+.export-prizes{
+display:flex;gap:14px;justify-content:center;margin:10px 0 14px 0;flex-wrap:wrap
+}
+.badge{
+padding:8px 12px;border-radius:999px;background:#0f0f0f;border:1px solid rgba(212,175,55,.35)
+}
+.export-grid{
+display:grid;grid-template-columns:repeat(10,1fr);gap:6px;
+background:#0f0f0f;padding:10px;border-radius:14px;border:1px solid rgba(212,175,55,.25)
+}
+.export-cell{
+padding:10px;border-radius:8px;text-align:center;font-weight:bold
+}
+.footer-brand{
+text-align:center;margin-top:16px;color:var(--gold)
+}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-<div class="title">SORTEOS ⚡</div>
-<img src="https://i.imgur.com/8Km9tLL.png" class="logo">
+  <div class="left">
+    <!-- CAMBIA ESTA URL POR TU LOGO CUANDO QUIERAS -->
+    <img class="logo" src="https://i.imgur.com/8Km9tLL.png">
+    <div class="brand">RAI HERNÁNDEZ</div>
+  </div>
+  <div class="actions">
+    <button class="btn" onclick="ganador()">🏆 Ganador</button>
+    <button class="btn" onclick="exportar()">📤 Exportar</button>
+    <button class="btn" onclick="reset()">♻️ Reset</button>
+  </div>
 </div>
 
 <div class="top">
+  <div class="title">SORTEOS ⚡</div>
+  <div class="sub">Participa. Confía. Gana.</div>
 
-<input id="titulo" placeholder="Nombre del sorteo">
-<input id="costo" placeholder="Costo">
+  <div class="config">
+    <input id="titulo" class="input" placeholder="Nombre del sorteo">
+    <input id="costo" class="input" placeholder="Costo boleto">
+    <input id="premio1" class="input" placeholder="1er premio (ej: 5000)">
+    <input id="premio2" class="input" placeholder="2do premio (ej: 2000)">
+  </div>
 
-<br>
-
-<button class="btn" onclick="ganador()">🏆 Ganador</button>
-<button class="btn" onclick="exportar()">📤 Exportar PRO</button>
-<button class="btn" onclick="reset()">♻️ Reset</button>
-
+  <div class="filters">
+    <div class="pill">⚪ Disponible</div>
+    <div class="pill yellow">🟡 Apartado</div>
+    <div class="pill green">🟢 Pagado</div>
+  </div>
 </div>
 
-<div class="grid" id="grid"></div>
+<div class="wrap">
+  <div id="grid" class="grid"></div>
 
-<div class="info">
-⚪ Disponible | 🟡 Apartado | 🟢 Pagado
+  <div class="legend">
+    <span class="l1">Disponible</span>
+    <span class="l2">Apartado</span>
+    <span class="l3">Pagado</span>
+  </div>
 </div>
 
 <script>
-
-let data = JSON.parse(localStorage.getItem("sorteo")) || {}
+let data = JSON.parse(localStorage.getItem("sorteo_pro")) || {};
 
 function init(){
-let grid=document.getElementById("grid")
-grid.innerHTML=""
-
-for(let i=0;i<100;i++){
-
-let d=document.createElement("div")
-d.className="cell libre"
-d.innerText=i
-
-d.onclick=()=>{
-
-let nombre=prompt("Nombre")
-
-if(nombre){
-
-let tipo=prompt("1=Apartado / 2=Pagado")
-
-data[i]={
-nombre,
-estado: tipo=="2"?"pagado":"apartado"
+  const g=document.getElementById("grid");
+  g.innerHTML="";
+  for(let i=0;i<100;i++){
+    const d=document.createElement("div");
+    d.className="cell libre";
+    d.dataset.i=i;
+    d.innerHTML=`<div>${pad(i)}</div>`;
+    d.onclick=()=>onClick(i);
+    g.appendChild(d);
+  }
+  render();
 }
 
-guardar()
-render()
+function pad(n){return n<10? "0"+n : n;}
 
-}
-
-}
-
-grid.appendChild(d)
-
-}
-
-render()
-
+function onClick(i){
+  let nombre=prompt("Nombre(s) (usa / para vaquita)");
+  if(!nombre) return;
+  let tipo=prompt("1 = Apartado | 2 = Pagado");
+  data[i]={nombre, estado: tipo==="2"?"pagado":"apartado"};
+  save(); render();
 }
 
 function render(){
-
-document.querySelectorAll(".cell").forEach((c,i)=>{
-
-c.className="cell libre"
-c.innerText=i
-
-if(data[i]){
-
-c.classList.add(data[i].estado)
-
-let emoji = data[i].nombre.includes("/") ? "🐮" : ""
-
-c.innerHTML = i + "<br>" + emoji + data[i].nombre
-
+  document.querySelectorAll(".cell").forEach((c)=>{
+    const i=parseInt(c.dataset.i);
+    c.className="cell libre";
+    c.innerHTML=`<div>${pad(i)}</div>`;
+    if(data[i]){
+      c.classList.add(data[i].estado);
+      const emoji = data[i].nombre.includes("/") ? "🐮 " : "";
+      c.innerHTML = `<div>${pad(i)}</div><small>${emoji}${data[i].nombre}</small>`;
+    }
+  });
 }
 
-})
-
-}
-
-function guardar(){
-localStorage.setItem("sorteo",JSON.stringify(data))
-}
+function save(){ localStorage.setItem("sorteo_pro", JSON.stringify(data)); }
 
 function reset(){
-localStorage.removeItem("sorteo")
-location.reload()
+  if(confirm("¿Reiniciar sorteo?")){
+    localStorage.removeItem("sorteo_pro");
+    location.reload();
+  }
 }
 
 function ganador(){
-
-let keys=Object.keys(data)
-
-if(keys.length===0) return
-
-let g=keys[Math.floor(Math.random()*keys.length)]
-
-document.querySelectorAll(".cell")[g].classList.add("ganador")
-
+  const keys=Object.keys(data);
+  if(!keys.length) return alert("No hay números asignados");
+  const idx=keys[Math.floor(Math.random()*keys.length)];
+  document.querySelectorAll(".cell")[idx].classList.add("ganador");
 }
 
-/* EXPORT PREMIUM REAL */
-
+/* ===== EXPORT PREMIUM ===== */
 function exportar(){
+  const titulo = document.getElementById("titulo").value || "SORTEO";
+  const costo  = document.getElementById("costo").value || "0";
+  const p1     = document.getElementById("premio1").value || "5000";
+  const p2     = document.getElementById("premio2").value || "2000";
 
-let html=`
-<div class="export-box">
+  const html = `
+  <div class="export-root">
+    <div class="export-header">
+      <div>
+        <div class="export-title">SORTEOS ⚡</div>
+        <div class="export-sub">${titulo}</div>
+      </div>
+      <img src="https://i.imgur.com/8Km9tLL.png" style="width:60px;height:60px;border-radius:10px">
+    </div>
 
-<h1 class="gold" style="text-align:center;">SORTEOS ⚡</h1>
+    <div class="export-prizes">
+      <div class="badge">🏆 1ER PREMIO: $${p1}</div>
+      <div class="badge">🏆 2DO PREMIO: $${p2}</div>
+      <div class="badge">💲 COSTO: $${costo}</div>
+    </div>
 
-<p style="text-align:center;">Participa. Confía. Gana.</p>
+    <div class="export-grid">
+      ${tablaExport()}
+    </div>
 
-<div style="text-align:center;margin:10px;">
-🏆 1ER PREMIO: $5000  
-🏆 2DO PREMIO: $2000  
-</div>
+    <div class="footer-brand">RAI HERNÁNDEZ · Participa. Confía. Gana.</div>
+  </div>
+  `;
 
-<div style="text-align:center;margin:10px;">
-💲 COSTO: $${document.getElementById("costo").value||0}
-</div>
+  const div=document.createElement("div");
+  div.innerHTML=html;
+  document.body.appendChild(div);
 
-<div style="
-display:grid;
-grid-template-columns:repeat(10,1fr);
-gap:5px;
-padding:10px;
-background:#111;
-border-radius:10px;
-">
-
-${generarTabla()}
-
-</div>
-
-</div>
-`
-
-let div=document.createElement("div")
-div.innerHTML=html
-document.body.appendChild(div)
-
-html2canvas(div).then(canvas=>{
-
-let a=document.createElement("a")
-a.href=canvas.toDataURL()
-a.download="sorteo.png"
-a.click()
-
-div.remove()
-
-})
-
+  html2canvas(div,{backgroundColor:null}).then(canvas=>{
+    const a=document.createElement("a");
+    a.href=canvas.toDataURL("image/png");
+    a.download="sorteo_premium.png";
+    a.click();
+    div.remove();
+  });
 }
 
-function generarTabla(){
+function tablaExport(){
+  let html="";
+  for(let i=0;i<100;i++){
+    let style="background:#fff;color:#000;";
+    let txt=pad(i);
 
-let html=""
+    if(data[i]){
+      if(data[i].estado==="pagado"){
+        style="background:#22c55e;color:#fff;";
+      }else{
+        style="background:#facc15;color:#000;";
+      }
+      const emoji = data[i].nombre.includes("/") ? "🐮 " : "";
+      txt = pad(i) + "<br><span style='font-size:10px'>" + emoji + data[i].nombre + "</span>";
+    }
 
-for(let i=0;i<100;i++){
-
-let style="background:#fff;color:#000"
-let txt=i
-
-if(data[i]){
-
-if(data[i].estado=="pagado"){
-style="background:#16a34a;color:#fff"
-}else{
-style="background:#facc15;color:#000"
+    html+=`<div class="export-cell" style="${style}">${txt}</div>`;
+  }
+  return html;
 }
 
-let emoji = data[i].nombre.includes("/") ? "🐮 " : ""
-
-txt=i+"<br>"+emoji+data[i].nombre
-
-}
-
-html+=`<div style="padding:10px;border-radius:8px;text-align:center;${style}">${txt}</div>`
-
-}
-
-return html
-
-}
-
-init()
-
+init();
 </script>
 
 </body>
