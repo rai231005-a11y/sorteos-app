@@ -1,180 +1,82 @@
 body{
 margin:0;
-font-family: 'Segoe UI', sans-serif;
-background:#050505;
+font-family:Arial;
+background:#0a0a0a;
 color:white;
 }
 
-/* HEADER */
 .header{
 display:flex;
 justify-content:space-between;
-align-items:center;
-padding:15px 20px;
-background:linear-gradient(90deg,#000,#0a0a0a);
-border-bottom:1px solid #d4af37;
+padding:15px;
+border-bottom:1px solid gold;
 }
 
 .logo-area{
 display:flex;
 align-items:center;
 gap:10px;
-font-weight:bold;
-color:#d4af37;
-font-size:18px;
+color:gold;
 }
 
 .logo-area img{
 width:40px;
-filter:drop-shadow(0 0 6px gold);
 }
 
-/* BOTONES */
 .menu button{
-background:#d4af37;
-color:#000;
+background:gold;
 border:none;
-padding:8px 14px;
-border-radius:10px;
-font-weight:bold;
+padding:8px;
+margin:3px;
+border-radius:8px;
 cursor:pointer;
-transition:.2s;
 }
 
-.menu button:hover{
-transform:scale(1.05);
-box-shadow:0 0 10px gold;
-}
-
-/* TITULO */
+/* TOP */
 .top{
 text-align:center;
-padding:20px 10px;
-}
-
-.top h1{
-font-size:32px;
-color:#ffd700;
-text-shadow:0 0 12px #ffd700;
-}
-
-.top p{
-opacity:.7;
-}
-
-/* INPUTS */
-.config input{
-margin:5px;
 padding:10px;
-border-radius:10px;
-border:1px solid #333;
-background:#0a0a0a;
-color:white;
 }
 
-/* LAYOUT */
+.config input, .config textarea{
+margin:5px;
+padding:8px;
+border-radius:8px;
+border:none;
+}
+
+/* MAIN */
 main{
 display:flex;
 }
 
-/* GRID PRINCIPAL */
 .grid{
 display:grid;
 grid-template-columns:repeat(10,1fr);
-gap:8px;
-padding:15px;
+gap:5px;
+padding:10px;
 flex:3;
 }
 
-/* CELDAS */
 .cell{
-border-radius:12px;
-padding:12px 5px;
+padding:10px;
 text-align:center;
-font-weight:bold;
+border-radius:8px;
 cursor:pointer;
-transition:.2s;
-background:#0a0a0a;
-border:1px solid #1a1a1a;
-}
-
-/* EFECTO HOVER */
-.cell:hover{
-transform:scale(1.08);
-box-shadow:0 0 8px gold;
+background:#222;
 }
 
 /* ESTADOS */
-.libre{
-background:#ffffff;
-color:#000;
-}
+.libre{background:white;color:black;}
+.apartado{background:#facc15;color:black;}
+.pagado{background:#22c55e;}
+.ganador{border:2px solid gold;}
 
-.apartado{
-background:#facc15;
-color:#000;
-box-shadow:0 0 10px #facc15;
-}
-
-.pagado{
-background:#16a34a;
-color:white;
-box-shadow:0 0 12px #16a34a;
-}
-
-/* GANADOR */
-.ganador{
-border:2px solid gold;
-box-shadow:0 0 15px gold;
-}
-
-/* PANEL DERECHO */
 .side{
 flex:1;
-padding:15px;
-background:#070707;
-border-left:1px solid #222;
+padding:10px;
 }
 
-/* TITULOS */
-.side h3{
-color:#d4af37;
-margin-top:10px;
-}
-
-/* LISTA */
 #lista div{
-background:#0f0f0f;
-padding:8px;
 margin:5px 0;
-border-radius:8px;
-border:1px solid #222;
-}
-
-/* GANADOR BOX */
-#ganadorBox{
-margin-top:10px;
-padding:15px;
-background:linear-gradient(145deg,#111,#000);
-border-radius:12px;
-text-align:center;
-border:1px solid gold;
-}
-
-#ganadorBox h2{
-color:#ffd700;
-font-size:22px;
-margin:0;
-}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-main{
-flex-direction:column;
-}
-
-.side{
-border-left:none;
-border-top:1px solid #222;
-}
 }
