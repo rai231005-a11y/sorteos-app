@@ -1,87 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SORTEOS ⚡ PRO</title>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+<style>
 body{
 margin:0;
 font-family:Arial;
-background:#050505;
+background:#0b0b0b;
 color:white;
 }
 
+/* HEADER */
 .header{
-display:flex;
-justify-content:space-between;
+text-align:center;
 padding:15px;
-border-bottom:1px solid gold;
+font-size:28px;
+font-weight:bold;
+color:#f5c542;
 }
 
-.logo-area{
-display:flex;
-align-items:center;
-gap:10px;
-color:gold;
-}
-
-.logo-area img{width:40px;}
-
-.menu button{
-background:gold;
-border:none;
-padding:8px;
-margin:3px;
-border-radius:8px;
-cursor:pointer;
-}
-
-.top{text-align:center;padding:10px;}
-
-.config input, .config textarea{
+/* BOTONES */
+.btn{
+background:#f5c542;
+color:black;
+padding:10px 15px;
+border-radius:10px;
 margin:5px;
-padding:8px;
-border-radius:8px;
+cursor:pointer;
 border:none;
+font-weight:bold;
 }
 
-main{display:flex;}
-
+/* GRID */
 .grid{
 display:grid;
 grid-template-columns:repeat(10,1fr);
-gap:6px;
+gap:8px;
 padding:10px;
-flex:3;
 }
 
 .cell{
-padding:10px;
-text-align:center;
+background:#1a1a1a;
 border-radius:10px;
+text-align:center;
+padding:10px;
 cursor:pointer;
-background:#111;
+font-size:14px;
 }
 
-.libre{background:white;color:black;}
+.libre{background:#1a1a1a;}
 .apartado{background:#facc15;color:black;}
 .pagado{background:#22c55e;}
-.ganador{border:2px solid gold;}
 
-.cell button{
-margin-top:5px;
-padding:3px 6px;
+input{
+width:100%;
+padding:10px;
+margin:5px 0;
+border-radius:8px;
 border:none;
-border-radius:6px;
-background:black;
+background:#1a1a1a;
 color:white;
 }
 
-.side{flex:1;padding:10px;}
-
-#lista div{margin:5px 0;}
-
-#ganadorBox{
-margin-top:10px;
+.panel{
 padding:10px;
-border:1px solid gold;
-text-align:center;
 }
 
-#stats{
-margin-top:10px;
+.ticket{
+background:black;
+border:2px solid gold;
+padding:20px;
+border-radius:15px;
+color:white;
 }
+
+.export{
+background:black;
+padding:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">SORTEOS ⚡</div>
+
+<div class="panel">
+
+<input id="nombre" placeholder="Nombre participante">
+<button class="btn" onclick="agregar()">Apartar</button>
+<button class="btn" onclick="pagar()">Pagado</button>
+<button class="btn" onclick="exportar()">Exportar</button>
+
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div id="ticketArea"></div>
+
+<script>
+
+let data = Array(100).fill(null);
+let selected = null;
+
+/* CREAR TABLA */
+function crear(){
+let g=document.getElementById("grid");
+g.innerHTML="";
+for(let i=0;i<100;i++){
+let d=document.createElement("div");
+d.className="cell libre";
+d.innerHTML=i;
+
+if(data[i]){
+d.innerHTML=i+"<br>"+data[i].nombre;
+d.className="cell "+data[i].estado;
+}
+
+d.onclick=()=>{selected=i;};
+g.appendChild(d);
+}
+}
+crear();
+
+/* APARTAR */
+function agregar(){
+if(selected===null)return;
+let nombre=document.getElementById("nombre").value;
+if(!nombre)return;
+
+data[selected]={
+nombre:nombre,
+estado:"apartado"
+};
+crear();
+}
+
+/* PAGAR */
+function pagar(){
+if(selected===null)return;
+if(!data[selected])return;
+
+data[selected].estado="pagado";
+
+generarBoleto(selected,data[selected].nombre);
+crear();
+}
+
+/* BOLETO */
+function generarBoleto(num,nombre){
+let div=document.getElementById("ticketArea");
+
+div.innerHTML=`
+<div class="ticket">
+<h2>SORTEOS ⚡</h2>
+<h3>Número: ${num}</h3>
+<h3>${nombre}</h3>
+<h3 style="color:#22c55e">PAGADO ✔</h3>
+</div>
+`;
+}
+
+/* EXPORTAR */
+function exportar(){
+let cont=document.createElement("div");
+cont.className="export";
+
+let html="<h2 style='color:gold;text-align:center;'>SORTEOS ⚡</h2>";
+html+="<div class='grid'>";
+
+for(let i=0;i<100;i++){
+let style="background:#fff;color:#000;";
+let txt=i;
+
+if(data[i]){
+if(data[i].estado=="pagado") style="background:#22c55e;color:#fff;";
+if(data[i].estado=="apartado") style="background:#facc15;color:#000;";
+txt=i+"<br>"+data[i].nombre;
+}
+
+html+=`<div style="${style};padding:8px;border-radius:8px;text-align:center">${txt}</div>`;
+}
+
+html+="</div>";
+cont.innerHTML=html;
+
+document.body.appendChild(cont);
+
+html2canvas(cont).then(canvas=>{
+let a=document.createElement("a");
+a.href=canvas.toDataURL();
+a.download="sorteo.png";
+a.click();
+cont.remove();
+});
+}
+
+</script>
+
+</body>
+</html>
