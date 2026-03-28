@@ -1,7 +1,9 @@
+const LOGO = "https://i.imgur.com/8Km9tLL.png"
+
 let data = JSON.parse(localStorage.getItem("sorteo")) || {}
 
 function init(){
-let grid = document.getElementById("grid")
+let grid=document.getElementById("grid")
 
 for(let i=0;i<100;i++){
 
@@ -9,7 +11,6 @@ let d=document.createElement("div")
 d.className="cell libre"
 d.innerText=i
 
-// CLICK = EDITAR
 d.onclick=()=>editar(i)
 
 grid.appendChild(d)
@@ -18,11 +19,10 @@ grid.appendChild(d)
 render()
 }
 
-// EDITAR NÚMERO
+// EDITAR
 function editar(i){
 
 let nombre=prompt("Nombre(s)")
-
 if(nombre===null) return
 
 if(nombre===""){
@@ -32,17 +32,17 @@ render()
 return
 }
 
-// AUTOMÁTICO APARTADO
 data[i]={nombre,estado:"apartado"}
-
 guardar()
 render()
 }
 
-// BOTÓN PAGAR
+// PAGAR
 function pagar(i){
 
 if(!data[i]) return
+
+if(!confirm("Confirmar pago")) return
 
 data[i].estado="pagado"
 
@@ -82,7 +82,6 @@ lista.innerHTML=""
 Object.keys(data).forEach(i=>{
 lista.innerHTML+=`<div>${i} - ${data[i].nombre}</div>`
 })
-
 }
 
 // GUARDAR
@@ -90,13 +89,13 @@ function guardar(){
 localStorage.setItem("sorteo",JSON.stringify(data))
 }
 
-// RESET
+// NUEVO
 function nuevo(){
 localStorage.removeItem("sorteo")
 location.reload()
 }
 
-// GANADOR SOLO PAGADOS
+// GANADOR
 function ganador(){
 
 let pagados = Object.keys(data).filter(i=>data[i].estado==="pagado")
@@ -109,26 +108,41 @@ return
 let g = pagados[Math.floor(Math.random()*pagados.length)]
 
 document.getElementById("ganadorBox").innerHTML=
-`<h2>${data[g].nombre}</h2><p>Número ${g}</p>`
+`<h2 style="color:gold">${data[g].nombre}</h2><p>Número ${g}</p>`
 }
 
-// BOLETO
+// 🎟️ BOLETO PRO
 function generarBoleto(num){
 
 let info=data[num]
 
 let html=`
-<div style="background:black;color:white;padding:30px;text-align:center;font-family:Arial">
+<div style="
+background:linear-gradient(#000,#111);
+color:white;
+padding:30px;
+font-family:Arial;
+text-align:center;
+border:2px solid gold;
+border-radius:20px;
+width:350px;
+">
+
+<img src="${LOGO}" style="width:80px">
+
 <h1 style="color:gold;">SORTEOS ⚡</h1>
 
 <h2>${document.getElementById("titulo").value||""}</h2>
 
-<p>Número ${num}</p>
-<p>${info.nombre}</p>
+<hr>
+
+<h2>Número ${num}</h2>
+<h3>${info.nombre}</h3>
 
 <p style="color:#22c55e;">PAGADO ✅</p>
 
 <p>${new Date().toLocaleString()}</p>
+
 </div>
 `
 
@@ -145,37 +159,35 @@ div.remove()
 })
 }
 
-// EXPORTACIÓN ARREGLADA
+// 📤 EXPORT PREMIUM REAL (YA COMO TU IMAGEN)
 function exportar(){
 
 let html=`
 <div style="
 background:black;
 color:white;
-padding:20px;
-width:800px;
+padding:40px;
+width:900px;
 font-family:Arial;
+border:2px solid gold;
+border-radius:20px;
 ">
 
-<h1 style="text-align:center;color:gold;">SORTEOS ⚡</h1>
+<div style="text-align:center">
+<img src="${LOGO}" style="width:80px">
+<h1 style="color:gold;">SORTEOS ⚡</h1>
+</div>
 
 <p style="text-align:center">${document.getElementById("desc").value||""}</p>
 
-<div style="text-align:center">
+<div style="text-align:center;margin-bottom:15px;">
 🏆 ${document.getElementById("p1").value||""}<br>
 🏆 ${document.getElementById("p2").value||""}<br>
 💲 $${document.getElementById("costo").value||""}
 </div>
 
-<div style="
-display:grid;
-grid-template-columns:repeat(10,1fr);
-gap:4px;
-margin-top:10px;
-">
-
+<div style="display:grid;grid-template-columns:repeat(10,1fr);gap:5px;">
 ${tablaExport()}
-
 </div>
 
 </div>
@@ -183,18 +195,15 @@ ${tablaExport()}
 
 let div=document.createElement("div")
 div.style.position="fixed"
-div.style.top="0"
 div.style.left="-9999px"
 div.innerHTML=html
-
 document.body.appendChild(div)
 
-// 🔥 CLAVE: esperar render
 setTimeout(()=>{
 html2canvas(div,{scale:2}).then(canvas=>{
 let a=document.createElement("a")
 a.href=canvas.toDataURL()
-a.download="sorteo.png"
+a.download="sorteo_pro.png"
 a.click()
 div.remove()
 })
@@ -213,7 +222,7 @@ let txt=i
 if(data[i]){
 
 if(data[i].estado=="pagado"){
-style="background:#22c55e;color:white"
+style="background:#16a34a;color:white"
 }else{
 style="background:#facc15;color:black"
 }
@@ -223,7 +232,7 @@ let emoji = data[i].nombre.includes("/") ? "🐮 " : ""
 txt=i+"<br>"+emoji+data[i].nombre
 }
 
-html+=`<div style="padding:8px;border-radius:6px;text-align:center;${style}">${txt}</div>`
+html+=`<div style="padding:10px;border-radius:8px;text-align:center;${style}">${txt}</div>`
 }
 
 return html
