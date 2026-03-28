@@ -1,104 +1,112 @@
-let modo="apartado";
-let data=[];
-
-function crearSorteo(){
-  document.getElementById("home").classList.remove("active");
-  document.getElementById("panel").classList.add("active");
-  generarGrid(100);
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background: radial-gradient(circle at top,#0a0a0a,#000);
+  color:white;
 }
 
-function setModo(m){
-  modo=m;
+/* HEADER */
+header{
+  text-align:center;
+  padding:15px;
 }
 
-function generarGrid(n){
-  data=Array(n).fill(null);
-  const grid=document.getElementById("grid");
-  grid.innerHTML="";
-
-  for(let i=0;i<n;i++){
-    let div=document.createElement("div");
-    div.className="cell";
-    div.innerText=i.toString().padStart(2,"0");
-    div.onclick=()=>clickNumero(i);
-    grid.appendChild(div);
-  }
+.logo{
+  width:70px;
 }
 
-function clickNumero(i){
-  let nombre=document.getElementById("nombre").value.trim();
-  if(!nombre) return alert("Escribe nombre");
-
-  // VAQUITA
-  if(data[i] && data[i].estado!=="pagado"){
-    data[i].nombre+=" / "+nombre;
-  }else{
-    data[i]={nombre:nombre,estado:"apartado"};
-  }
-
-  // CAMBIO DE ESTADO
-  if(modo==="pagado"){
-    data[i].estado="pagado";
-    generarBoleto(i);
-  }
-
-  render();
+h1{
+  color:#ffd700;
+  letter-spacing:2px;
+  text-shadow:0 0 20px rgba(255,215,0,.6);
 }
 
-function render(){
-  const cells=document.querySelectorAll(".cell");
-  const lista=document.getElementById("lista");
-  lista.innerHTML="";
-
-  data.forEach((d,i)=>{
-    let c=cells[i];
-    c.className="cell";
-
-    if(d){
-      let emoji=d.nombre.includes("/")?"🐮":"";
-      c.innerHTML=`<b>${i}</b><br>${emoji}${d.nombre}`;
-
-      if(d.estado==="apartado") c.classList.add("apartado");
-      if(d.estado==="pagado") c.classList.add("pagado");
-
-      lista.innerHTML+=`<div>${i} - ${d.nombre}</div>`;
-    }
-  });
+/* INPUT */
+input{
+  width:100%;
+  padding:14px;
+  background:#111;
+  border:1px solid #222;
+  border-radius:12px;
+  color:white;
+  margin-bottom:12px;
 }
 
-function generarBoleto(i){
-  let d=data[i];
-
-  let div=document.createElement("div");
-  div.style.padding="20px";
-  div.style.background="#000";
-  div.style.color="white";
-  div.style.textAlign="center";
-
-  div.innerHTML=`
-    <h1 style="color:gold">SORTEOS ⚡</h1>
-    <h2>Número: ${i}</h2>
-    <h3>${d.nombre}</h3>
-    <p style="color:#22c55e;font-size:20px">✔ PAGADO</p>
-    <p>${new Date().toLocaleString()}</p>
-  `;
-
-  document.body.appendChild(div);
-
-  html2canvas(div).then(canvas=>{
-    let a=document.createElement("a");
-    a.href=canvas.toDataURL();
-    a.download="boleto.png";
-    a.click();
-    div.remove();
-  });
+/* BOTONES */
+.acciones{
+  display:flex;
+  gap:10px;
+  margin-bottom:12px;
 }
 
-function exportar(){
-  html2canvas(document.body).then(canvas=>{
-    let a=document.createElement("a");
-    a.href=canvas.toDataURL();
-    a.download="sorteo.png";
-    a.click();
-  });
+.acciones button{
+  flex:1;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  font-weight:bold;
+  background:linear-gradient(145deg,#ffd700,#b8860b);
+  color:black;
+  box-shadow:0 0 12px rgba(255,215,0,.5);
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  gap:8px;
+}
+
+.cell{
+  background:#111;
+  padding:12px;
+  border-radius:14px;
+  text-align:center;
+  font-size:13px;
+  transition:.2s;
+  box-shadow: inset 0 0 5px #000;
+}
+
+.cell:hover{
+  transform:scale(1.06);
+}
+
+/* ESTADOS */
+.apartado{
+  background:linear-gradient(#facc15,#ca8a04);
+  color:black;
+}
+
+.pagado{
+  background:linear-gradient(#22c55e,#14532d);
+  box-shadow:0 0 12px #22c55e;
+}
+
+/* PANEL */
+.side{
+  margin-top:15px;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid gold;
+  background:#111;
+}
+
+.side h3{
+  color:gold;
+}
+
+/* LISTA */
+#lista div{
+  padding:5px;
+  border-bottom:1px solid #222;
+}
+
+/* BOLETO */
+.ticket{
+  background:#000;
+  border:2px solid gold;
+  border-radius:20px;
+  padding:20px;
+  text-align:center;
+  color:white;
 }
