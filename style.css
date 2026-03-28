@@ -1,232 +1,133 @@
-let data = JSON.parse(localStorage.getItem("sorteo")) || {}
-
-function init(){
-let grid = document.getElementById("grid")
-
-for(let i=0;i<100;i++){
-
-let d=document.createElement("div")
-d.className="cell libre"
-d.innerText=i
-
-// CLICK = EDITAR
-d.onclick=()=>editar(i)
-
-grid.appendChild(d)
-}
-
-render()
-}
-
-// EDITAR NÚMERO
-function editar(i){
-
-let nombre=prompt("Nombre(s)")
-
-if(nombre===null) return
-
-if(nombre===""){
-delete data[i]
-guardar()
-render()
-return
-}
-
-// AUTOMÁTICO APARTADO
-data[i]={nombre,estado:"apartado"}
-
-guardar()
-render()
-}
-
-// BOTÓN PAGAR
-function pagar(i){
-
-if(!data[i]) return
-
-data[i].estado="pagado"
-
-guardar()
-render()
-
-generarBoleto(i)
-}
-
-// RENDER
-function render(){
-
-document.querySelectorAll(".cell").forEach((c,i)=>{
-
-c.className="cell libre"
-c.innerHTML=i
-
-if(data[i]){
-
-c.classList.add(data[i].estado)
-
-let emoji = data[i].nombre.includes("/") ? "🐮 " : ""
-
-c.innerHTML=`
-${i}<br>
-<small>${emoji}${data[i].nombre}</small><br>
-<button onclick="event.stopPropagation(); pagar(${i})">💲</button>
-`
-}
-
-})
-
-// LISTA
-let lista=document.getElementById("lista")
-lista.innerHTML=""
-
-Object.keys(data).forEach(i=>{
-lista.innerHTML+=`<div>${i} - ${data[i].nombre}</div>`
-})
-
-}
-
-// GUARDAR
-function guardar(){
-localStorage.setItem("sorteo",JSON.stringify(data))
-}
-
-// RESET
-function nuevo(){
-localStorage.removeItem("sorteo")
-location.reload()
-}
-
-// GANADOR SOLO PAGADOS
-function ganador(){
-
-let pagados = Object.keys(data).filter(i=>data[i].estado==="pagado")
-
-if(pagados.length===0){
-alert("No hay números pagados")
-return
-}
-
-let g = pagados[Math.floor(Math.random()*pagados.length)]
-
-document.getElementById("ganadorBox").innerHTML=
-`<h2>${data[g].nombre}</h2><p>Número ${g}</p>`
-}
-
-// BOLETO
-function generarBoleto(num){
-
-let info=data[num]
-
-let html=`
-<div style="background:black;color:white;padding:30px;text-align:center;font-family:Arial">
-<h1 style="color:gold;">SORTEOS ⚡</h1>
-
-<h2>${document.getElementById("titulo").value||""}</h2>
-
-<p>Número ${num}</p>
-<p>${info.nombre}</p>
-
-<p style="color:#22c55e;">PAGADO ✅</p>
-
-<p>${new Date().toLocaleString()}</p>
-</div>
-`
-
-let div=document.createElement("div")
-div.innerHTML=html
-document.body.appendChild(div)
-
-html2canvas(div,{scale:2}).then(canvas=>{
-let a=document.createElement("a")
-a.href=canvas.toDataURL()
-a.download="boleto.png"
-a.click()
-div.remove()
-})
-}
-
-// EXPORTACIÓN ARREGLADA
-function exportar(){
-
-let html=`
-<div style="
-background:black;
+body{
+margin:0;
+font-family: 'Segoe UI', sans-serif;
+background:#050505;
 color:white;
+}
+
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 20px;
+background:linear-gradient(90deg,#000,#0a0a0a);
+border-bottom:1px solid #d4af37;
+}
+
+.logo-area{
+display:flex;
+align-items:center;
+gap:10px;
+color:#d4af37;
+font-weight:bold;
+}
+
+.logo-area img{
+width:40px;
+filter:drop-shadow(0 0 6px gold);
+}
+
+/* BOTONES */
+.menu button{
+background:#d4af37;
+color:black;
+border:none;
+padding:8px 14px;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.menu button:hover{
+box-shadow:0 0 10px gold;
+}
+
+/* TOP */
+.top{
+text-align:center;
 padding:20px;
-width:800px;
-font-family:Arial;
-">
+}
 
-<h1 style="text-align:center;color:gold;">SORTEOS ⚡</h1>
+.top h1{
+color:#ffd700;
+text-shadow:0 0 10px gold;
+}
 
-<p style="text-align:center">${document.getElementById("desc").value||""}</p>
+.config input, .config textarea{
+margin:5px;
+padding:10px;
+border-radius:10px;
+border:none;
+background:#0a0a0a;
+color:white;
+border:1px solid #333;
+}
 
-<div style="text-align:center">
-🏆 ${document.getElementById("p1").value||""}<br>
-🏆 ${document.getElementById("p2").value||""}<br>
-💲 $${document.getElementById("costo").value||""}
-</div>
-
-<div style="
+/* GRID */
+.grid{
 display:grid;
 grid-template-columns:repeat(10,1fr);
-gap:4px;
+gap:8px;
+padding:15px;
+}
+
+.cell{
+padding:12px;
+border-radius:12px;
+text-align:center;
+font-weight:bold;
+cursor:pointer;
+background:#0a0a0a;
+border:1px solid #222;
+transition:.2s;
+}
+
+.cell:hover{
+transform:scale(1.08);
+box-shadow:0 0 8px gold;
+}
+
+/* ESTADOS */
+.libre{background:#ffffff;color:#000;}
+.apartado{background:#facc15;color:#000;}
+.pagado{
+background:#16a34a;
+color:white;
+box-shadow:0 0 10px #16a34a;
+}
+
+/* BOTÓN PAGAR */
+.cell button{
+margin-top:5px;
+padding:3px 6px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+background:black;
+color:white;
+}
+
+/* SIDE */
+.side{
+padding:10px;
+background:#070707;
+border-left:1px solid #222;
+}
+
+#lista div{
+background:#111;
+padding:6px;
+margin:4px 0;
+border-radius:6px;
+}
+
+/* GANADOR */
+#ganadorBox{
 margin-top:10px;
-">
-
-${tablaExport()}
-
-</div>
-
-</div>
-`
-
-let div=document.createElement("div")
-div.style.position="fixed"
-div.style.top="0"
-div.style.left="-9999px"
-div.innerHTML=html
-
-document.body.appendChild(div)
-
-// 🔥 CLAVE: esperar render
-setTimeout(()=>{
-html2canvas(div,{scale:2}).then(canvas=>{
-let a=document.createElement("a")
-a.href=canvas.toDataURL()
-a.download="sorteo.png"
-a.click()
-div.remove()
-})
-},300)
+padding:15px;
+background:linear-gradient(145deg,#111,#000);
+border-radius:12px;
+text-align:center;
+border:1px solid gold;
 }
-
-function tablaExport(){
-
-let html=""
-
-for(let i=0;i<100;i++){
-
-let style="background:white;color:black"
-let txt=i
-
-if(data[i]){
-
-if(data[i].estado=="pagado"){
-style="background:#22c55e;color:white"
-}else{
-style="background:#facc15;color:black"
-}
-
-let emoji = data[i].nombre.includes("/") ? "🐮 " : ""
-
-txt=i+"<br>"+emoji+data[i].nombre
-}
-
-html+=`<div style="padding:8px;border-radius:6px;text-align:center;${style}">${txt}</div>`
-}
-
-return html
-}
-
-init()
