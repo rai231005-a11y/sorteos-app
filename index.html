@@ -1,57 +1,87 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SORTEOS ⚡</title>
+body{
+margin:0;
+font-family:Arial;
+background:#050505;
+color:white;
+}
 
-<link rel="stylesheet" href="style.css">
-<script defer src="app.js"></script>
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-</head>
+.header{
+display:flex;
+justify-content:space-between;
+padding:15px;
+border-bottom:1px solid gold;
+}
 
-<body>
+.logo-area{
+display:flex;
+align-items:center;
+gap:10px;
+color:gold;
+}
 
-<header class="header">
-  <div class="logo-area">
-    <img src="https://i.imgur.com/8Km9tLL.png">
-    <span>RAI HERNÁNDEZ</span>
-  </div>
+.logo-area img{width:40px;}
 
-  <div class="menu">
-    <button onclick="nuevo()">Nuevo</button>
-    <button onclick="exportar()">Exportar</button>
-    <button onclick="ganador()">Ganador</button>
-  </div>
-</header>
+.menu button{
+background:gold;
+border:none;
+padding:8px;
+margin:3px;
+border-radius:8px;
+cursor:pointer;
+}
 
-<section class="top">
-  <h1>SORTEOS ⚡</h1>
-  <p>Participa. Confía. Gana.</p>
+.top{text-align:center;padding:10px;}
 
-  <div class="config">
-    <input id="titulo" placeholder="Nombre del sorteo">
-    <input id="costo" placeholder="Costo">
-    <input id="p1" placeholder="1er premio">
-    <input id="p2" placeholder="2do premio">
-    <textarea id="desc" placeholder="Descripción"></textarea>
-  </div>
-</section>
+.config input, .config textarea{
+margin:5px;
+padding:8px;
+border-radius:8px;
+border:none;
+}
 
-<main>
-  <div class="grid" id="grid"></div>
+main{display:flex;}
 
-  <div class="side">
-    <h3>Participantes</h3>
-    <div id="lista"></div>
+.grid{
+display:grid;
+grid-template-columns:repeat(10,1fr);
+gap:6px;
+padding:10px;
+flex:3;
+}
 
-    <h3>Ganador</h3>
-    <div id="ganadorBox"></div>
+.cell{
+padding:10px;
+text-align:center;
+border-radius:10px;
+cursor:pointer;
+background:#111;
+}
 
-    <h3>Estadísticas</h3>
-    <div id="stats"></div>
-  </div>
-</main>
+.libre{background:white;color:black;}
+.apartado{background:#facc15;color:black;}
+.pagado{background:#22c55e;}
+.ganador{border:2px solid gold;}
 
-</body>
-</html>
+.cell button{
+margin-top:5px;
+padding:3px 6px;
+border:none;
+border-radius:6px;
+background:black;
+color:white;
+}
+
+.side{flex:1;padding:10px;}
+
+#lista div{margin:5px 0;}
+
+#ganadorBox{
+margin-top:10px;
+padding:10px;
+border:1px solid gold;
+text-align:center;
+}
+
+#stats{
+margin-top:10px;
+}
