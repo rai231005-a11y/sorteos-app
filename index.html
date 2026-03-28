@@ -5,80 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SORTEOS ⚡ PRO</title>
 
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
 <style>
-body {
-  margin:0;
-  font-family: Arial;
-  background:#020617;
-  color:white;
-  text-align:center;
-}
+body {margin:0;font-family:Arial;background:#020617;color:white;}
+header{text-align:center;padding:15px;color:#38bdf8;font-size:24px;}
 
-h1 {color:#38bdf8}
+.grid{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;max-width:500px;margin:20px auto;}
+.cell{background:#0f172a;padding:12px;border-radius:10px;cursor:pointer;}
+.cell.paid{background:#22c55e;color:black;}
 
-.grid {
-  display:grid;
-  grid-template-columns:repeat(10,1fr);
-  gap:8px;
-  max-width:500px;
-  margin:20px auto;
-}
+.input-list{max-width:500px;margin:auto;}
+.row{display:flex;margin:5px;}
+.row input{flex:1;padding:10px;border-radius:8px;border:none;}
 
-.cell {
-  background:#111827;
-  padding:12px;
-  border-radius:8px;
-  cursor:pointer;
-  transition:.2s;
-}
+.btn{width:50px;margin-left:5px;border:none;border-radius:8px;background:#1f2937;color:white;}
+.btn.pagado{background:#22c55e;}
 
-.cell:hover {transform:scale(1.05)}
-
-.paid {
-  background:#22c55e;
-}
-
-.input-list {
-  max-width:500px;
-  margin:auto;
-}
-
-.input-row {
-  display:flex;
-  margin:5px;
-}
-
-.input-row input {
-  flex:1;
-  padding:10px;
-  border:none;
-  border-radius:6px;
-}
-
-.btn-pago {
-  width:50px;
-  margin-left:5px;
-  border:none;
-  border-radius:6px;
-  background:#1f2937;
-  color:white;
-  cursor:pointer;
-}
-
-.btn-pago.pagado {
-  background:#22c55e;
-}
-
-.stats {
-  margin:10px;
-  font-size:18px;
-}
+.stats{text-align:center;margin:10px;color:#fde68a;}
 </style>
 </head>
 
 <body>
 
-<h1>SORTEOS ⚡</h1>
+<header>SORTEOS ⚡</header>
 
 <div class="stats" id="stats"></div>
 
@@ -87,85 +37,153 @@ h1 {color:#38bdf8}
 <div class="input-list" id="inputs"></div>
 
 <script>
+
+// ================= CONFIG =================
+const CONFIG = {
+  nombre: "SORTEO ESPECIAL",
+  codigo: "S-001",
+  premios: ["1er Lugar $5000","2do Lugar $2000"],
+  logo: "https://upload.wikimedia.org/wikipedia/commons/3/3f/Logo_placeholder.png"
+};
+
+// ================= DATA =================
 let data = JSON.parse(localStorage.getItem("sorteo")) || {};
 
-function save() {
-  localStorage.setItem("sorteo", JSON.stringify(data));
+function save(){localStorage.setItem("sorteo",JSON.stringify(data));}
+
+// ================= BOLETO =================
+function boleto(num){
+
+if(!data[num] || !data[num].pagado)return;
+
+let nombre=data[num].nombre;
+let fecha=new Date().toLocaleString();
+
+let div=document.createElement("div");
+
+div.innerHTML=`
+<div style="background:black;color:white;padding:20px;text-align:center;font-family:Arial;">
+<div style="max-width:320px;margin:auto;padding:20px;border-radius:20px;background:#000;border:2px solid gold;box-shadow:0 0 20px gold;">
+
+<img src="${CONFIG.logo}" style="width:80px;">
+
+<h2 style="color:gold;">SORTEOS ⚡</h2>
+
+<h3>${CONFIG.nombre}</h3>
+
+<div style="font-size:60px;color:#22c55e;">${num}</div>
+
+<p><b>${nombre}</b></p>
+
+<div style="background:#22c55e;padding:10px;border-radius:10px;">✔ PAGADO</div>
+
+<p>${fecha}</p>
+
+${CONFIG.premios.map(p=>`<p>${p}</p>`).join("")}
+
+<p><b>${CONFIG.codigo}</b></p>
+
+</div>
+</div>
+`;
+
+document.body.appendChild(div);
+
+html2canvas(div).then(c=>{
+let a=document.createElement("a");
+a.download="boleto.png";
+a.href=c.toDataURL();
+a.click();
+
+div.remove();
+
+// WHATSAPP
+let msg="🎟️ Tu boleto está listo - SORTEOS ⚡";
+window.open("https://wa.me/?text="+encodeURIComponent(msg));
+});
+
 }
 
-function render() {
-  const grid = document.getElementById("grid");
-  const inputs = document.getElementById("inputs");
-  grid.innerHTML = "";
-  inputs.innerHTML = "";
+// ================= RENDER =================
+function render(){
 
-  let total = 0;
-  let pagados = 0;
+let grid=document.getElementById("grid");
+let inputs=document.getElementById("inputs");
 
-  for (let i = 0; i < 100; i++) {
+grid.innerHTML="";
+inputs.innerHTML="";
 
-    if (!data[i]) data[i] = {nombre:"", pagado:false};
+let pagados=0,total=0;
 
-    // GRID
-    let cell = document.createElement("div");
-    cell.className = "cell";
-    if (data[i].pagado) cell.classList.add("paid");
+for(let i=0;i<100;i++){
 
-    cell.innerHTML = i + "<br>" + (data[i].nombre || "");
+if(!data[i])data[i]={nombre:"",pagado:false};
 
-    cell.onclick = () => {
-      let nombre = prompt("Nombre del participante:", data[i].nombre);
-      if (nombre !== null) {
-        data[i].nombre = nombre;
-        save();
-        render();
-      }
-    };
+// GRID
+let cell=document.createElement("div");
+cell.className="cell";
 
-    grid.appendChild(cell);
+if(data[i].pagado)cell.classList.add("paid");
 
-    // INPUTS
-    let row = document.createElement("div");
-    row.className = "input-row";
+cell.innerHTML=i+"<br>"+(data[i].nombre||"");
 
-    let input = document.createElement("input");
-    input.value = data[i].nombre;
-    input.placeholder = i;
+cell.onclick=()=>{
+let nombre=prompt("Nombre:",data[i].nombre);
+if(nombre!==null){
+data[i].nombre=nombre;
+save();
+render();
+}
+};
 
-    input.oninput = (e) => {
-      data[i].nombre = e.target.value;
-      save();
-      render();
-    };
+grid.appendChild(cell);
 
-    let btn = document.createElement("button");
-    btn.className = "btn-pago";
-    if (data[i].pagado) btn.classList.add("pagado");
+// INPUT
+let row=document.createElement("div");
+row.className="row";
 
-    btn.innerHTML = "$";
+let input=document.createElement("input");
+input.value=data[i].nombre;
+input.placeholder=i;
 
-    btn.onclick = () => {
-      data[i].pagado = !data[i].pagado;
-      save();
-      render();
-    };
+input.oninput=e=>{
+data[i].nombre=e.target.value;
+save();
+render();
+};
 
-    row.appendChild(input);
-    row.appendChild(btn);
-    inputs.appendChild(row);
+let btn=document.createElement("button");
+btn.className="btn";
+btn.innerHTML="$";
 
-    // STATS
-    if (data[i].pagado) {
-      pagados++;
-      total += 100;
-    }
-  }
+if(data[i].pagado)btn.classList.add("pagado");
 
-  document.getElementById("stats").innerHTML =
-    `Pagados: ${pagados} | Total: $${total}`;
+btn.onclick=()=>{
+data[i].pagado=!data[i].pagado;
+save();
+render();
+
+// 🔥 AUTO BOLETO
+if(data[i].pagado) boleto(i);
+
+};
+
+row.appendChild(input);
+row.appendChild(btn);
+inputs.appendChild(row);
+
+if(data[i].pagado){
+pagados++;
+total+=100;
+}
+
+}
+
+document.getElementById("stats").innerHTML=`Pagados: ${pagados} | Total: $${total}`;
 }
 
 render();
+
 </script>
 
 </body>
