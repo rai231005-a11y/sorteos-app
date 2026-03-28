@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>SORTEOS ⚡ PRO</title>
 
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -12,82 +13,109 @@
 body{
 margin:0;
 font-family:Arial;
-background:#0b1220;
+background:#0a0a0a;
 color:white;
 }
 
 /* HEADER */
 .header{
 background:black;
-padding:15px;
-text-align:center;
-font-size:30px;
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:2px solid gold;
+}
+
+.logo{
+height:50px;
+}
+
+.title{
+font-size:28px;
+color:gold;
 font-weight:bold;
-color:#ffd700;
+}
+
+/* PANEL */
+.top{
+padding:10px;
+text-align:center;
+}
+
+.btn{
+background:linear-gradient(45deg,#ffd700,#ff9900);
+border:none;
+padding:10px 15px;
+border-radius:10px;
+margin:5px;
+cursor:pointer;
+font-weight:bold;
 }
 
 /* GRID */
-.container{
-display:grid;
-grid-template-columns:2fr 1fr;
-gap:15px;
-padding:15px;
-}
-
 .grid{
 display:grid;
 grid-template-columns:repeat(10,1fr);
 gap:6px;
+padding:10px;
 }
 
 .cell{
 padding:12px;
 border-radius:10px;
 text-align:center;
-cursor:pointer;
 font-weight:bold;
-background:#1e293b;
+cursor:pointer;
+transition:0.2s;
 }
 
-.libre{background:white;color:black;}
-.apartado{background:#facc15;color:black;}
-.pagado{background:#22c55e;}
-.ganador{background:#ffd700;color:black;}
-
-/* PANEL */
-.panel{
-background:#111827;
-padding:10px;
-border-radius:10px;
+/* ESTADOS */
+.libre{
+background:#ffffff;
+color:#000;
 }
 
-input, textarea{
-width:100%;
-padding:8px;
-margin-bottom:10px;
-border-radius:8px;
-border:none;
-background:#1e293b;
+.apartado{
+background:#facc15;
+color:#000;
+}
+
+.pagado{
+background:#16a34a;
 color:white;
 }
 
-button{
-padding:10px;
+.ganador{
+background:gold;
+color:black;
+}
+
+/* INFO */
+.info{
+text-align:center;
+margin-top:10px;
+}
+
+input{
+padding:8px;
 margin:5px;
-border:none;
 border-radius:8px;
-cursor:pointer;
+border:none;
 }
 
-.lista{
-font-size:14px;
+/* EXPORT */
+.export-box{
+background:black;
+color:white;
+padding:30px;
+font-family:Arial;
+width:900px;
 }
 
-.item{
-display:flex;
-justify-content:space-between;
-border-bottom:1px solid #333;
-padding:5px;
+.gold{
+color:gold;
+font-weight:bold;
 }
 
 </style>
@@ -95,131 +123,129 @@ padding:5px;
 
 <body>
 
-<div class="header">SORTEOS ⚡</div>
-
-<div class="container">
-
-<div>
-<div class="grid" id="grid"></div>
+<div class="header">
+<div class="title">SORTEOS ⚡</div>
+<img src="https://i.imgur.com/8Km9tLL.png" class="logo">
 </div>
 
-<div class="panel">
+<div class="top">
 
 <input id="titulo" placeholder="Nombre del sorteo">
 <input id="costo" placeholder="Costo">
-<textarea id="desc" placeholder="Descripción"></textarea>
 
-<button onclick="ganador()">🏆 Ganador</button>
-<button onclick="exportarPremium()">📤 Exportar PRO</button>
-<button onclick="reset()">♻️ Reset</button>
+<br>
 
-<div class="lista" id="lista"></div>
+<button class="btn" onclick="ganador()">🏆 Ganador</button>
+<button class="btn" onclick="exportar()">📤 Exportar PRO</button>
+<button class="btn" onclick="reset()">♻️ Reset</button>
 
 </div>
 
+<div class="grid" id="grid"></div>
+
+<div class="info">
+⚪ Disponible | 🟡 Apartado | 🟢 Pagado
 </div>
 
 <script>
 
-let data=JSON.parse(localStorage.getItem("sorteo"))||{};
+let data = JSON.parse(localStorage.getItem("sorteo")) || {}
 
 function init(){
-crear();
-render();
-}
-
-function crear(){
-let g=document.getElementById("grid");
-g.innerHTML="";
+let grid=document.getElementById("grid")
+grid.innerHTML=""
 
 for(let i=0;i<100;i++){
-let d=document.createElement("div");
-d.className="cell libre";
-d.innerText=i;
+
+let d=document.createElement("div")
+d.className="cell libre"
+d.innerText=i
 
 d.onclick=()=>{
-let nombre=prompt("Nombre(s)");
+
+let nombre=prompt("Nombre")
 
 if(nombre){
 
-let estado=prompt("1=Apartado / 2=Pagado");
+let tipo=prompt("1=Apartado / 2=Pagado")
 
 data[i]={
 nombre,
-estado:estado=="2"?"pagado":"apartado"
-};
-
-guardar();
-render();
+estado: tipo=="2"?"pagado":"apartado"
 }
-};
 
-g.appendChild(d);
+guardar()
+render()
+
 }
+
+}
+
+grid.appendChild(d)
+
+}
+
+render()
+
 }
 
 function render(){
 
-let lista=document.getElementById("lista");
-lista.innerHTML="";
-
 document.querySelectorAll(".cell").forEach((c,i)=>{
 
-c.className="cell libre";
-c.innerText=i;
+c.className="cell libre"
+c.innerText=i
 
 if(data[i]){
 
-if(data[i].estado=="pagado"){
-c.classList.add("pagado");
-}else{
-c.classList.add("apartado");
-}
+c.classList.add(data[i].estado)
 
-c.innerHTML=i+"<br>"+data[i].nombre;
+let emoji = data[i].nombre.includes("/") ? "🐮" : ""
 
-let emoji = data[i].nombre.includes("/") ? "🐮" : "";
-
-lista.innerHTML+=`
-<div class="item">
-<span>${emoji} ${data[i].nombre}</span>
-<span>${i}</span>
-</div>
-`;
+c.innerHTML = i + "<br>" + emoji + data[i].nombre
 
 }
 
-});
+})
 
 }
 
 function guardar(){
-localStorage.setItem("sorteo",JSON.stringify(data));
+localStorage.setItem("sorteo",JSON.stringify(data))
 }
 
 function reset(){
-data={};
-guardar();
-location.reload();
+localStorage.removeItem("sorteo")
+location.reload()
 }
 
 function ganador(){
-let keys=Object.keys(data);
-let g=keys[Math.floor(Math.random()*keys.length)];
 
-document.querySelectorAll(".cell")[g].classList.add("ganador");
+let keys=Object.keys(data)
+
+if(keys.length===0) return
+
+let g=keys[Math.floor(Math.random()*keys.length)]
+
+document.querySelectorAll(".cell")[g].classList.add("ganador")
+
 }
 
-/* EXPORT PRO CORRECTO */
+/* EXPORT PREMIUM REAL */
 
-function exportarPremium(){
+function exportar(){
 
 let html=`
-<div style="background:black;color:white;padding:30px;width:900px;font-family:Arial;">
+<div class="export-box">
 
-<h1 style="text-align:center;color:#ffd700;">SORTEOS ⚡</h1>
+<h1 class="gold" style="text-align:center;">SORTEOS ⚡</h1>
 
 <p style="text-align:center;">Participa. Confía. Gana.</p>
+
+<div style="text-align:center;margin:10px;">
+🏆 1ER PREMIO: $5000  
+🏆 2DO PREMIO: $2000  
+</div>
 
 <div style="text-align:center;margin:10px;">
 💲 COSTO: $${document.getElementById("costo").value||0}
@@ -229,71 +255,67 @@ let html=`
 display:grid;
 grid-template-columns:repeat(10,1fr);
 gap:5px;
-background:#111;
 padding:10px;
-border-radius:15px;
+background:#111;
+border-radius:10px;
 ">
 
 ${generarTabla()}
 
 </div>
 
-<div style="
-display:flex;
-justify-content:center;
-gap:10px;
-margin-top:15px;
-">
-<span style="background:white;color:black;padding:5px;">Disponible</span>
-<span style="background:#facc15;padding:5px;">Apartado</span>
-<span style="background:#22c55e;padding:5px;">Pagado</span>
 </div>
+`
 
-</div>
-`;
-
-let div=document.createElement("div");
-div.innerHTML=html;
-document.body.appendChild(div);
+let div=document.createElement("div")
+div.innerHTML=html
+document.body.appendChild(div)
 
 html2canvas(div).then(canvas=>{
-let a=document.createElement("a");
-a.href=canvas.toDataURL();
-a.download="sorteo_pro.png";
-a.click();
-div.remove();
-});
+
+let a=document.createElement("a")
+a.href=canvas.toDataURL()
+a.download="sorteo.png"
+a.click()
+
+div.remove()
+
+})
+
 }
 
 function generarTabla(){
 
-let html="";
+let html=""
 
 for(let i=0;i<100;i++){
 
-let style="background:#fff;color:#000;";
-let txt=i;
+let style="background:#fff;color:#000"
+let txt=i
 
 if(data[i]){
 
 if(data[i].estado=="pagado"){
-style="background:#22c55e;color:#fff;";
+style="background:#16a34a;color:#fff"
 }else{
-style="background:#facc15;color:#000;";
+style="background:#facc15;color:#000"
 }
 
-let emoji = data[i].nombre.includes("/") ? "🐮 " : "";
+let emoji = data[i].nombre.includes("/") ? "🐮 " : ""
 
-txt=i+"<br>"+emoji+data[i].nombre;
+txt=i+"<br>"+emoji+data[i].nombre
+
 }
 
-html+=`<div style="padding:10px;border-radius:8px;text-align:center;${style}">${txt}</div>`;
+html+=`<div style="padding:10px;border-radius:8px;text-align:center;${style}">${txt}</div>`
+
 }
 
-return html;
+return html
+
 }
 
-init();
+init()
 
 </script>
 
