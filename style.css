@@ -1,85 +1,95 @@
 body{
   margin:0;
-  font-family:Arial;
-  background:#050505;
+  font-family:'Segoe UI',sans-serif;
+  background: radial-gradient(circle,#0a0a0a,#000);
   color:white;
 }
 
+/* HEADER */
 header{
   text-align:center;
   padding:15px;
 }
 
 .logo{
-  width:60px;
+  width:70px;
 }
 
 h1{
   color:gold;
+  letter-spacing:2px;
+  text-shadow:0 0 15px gold;
 }
 
-.screen{
-  display:none;
-  padding:10px;
-}
-
-.active{
-  display:block;
-}
-
-.menu button{
-  width:100%;
-  margin:10px 0;
-  padding:15px;
-  background:#111;
-  border:1px solid gold;
-  color:white;
-  border-radius:10px;
-}
-
+/* INPUT */
 input{
   width:100%;
-  padding:12px;
+  padding:14px;
   background:#111;
-  border:none;
+  border:1px solid #333;
+  border-radius:12px;
   color:white;
-  border-radius:10px;
-  margin-bottom:10px;
+  margin-bottom:12px;
 }
 
+/* BOTONES */
 .acciones{
   display:flex;
   gap:10px;
+  margin-bottom:12px;
 }
 
 .acciones button{
   flex:1;
-  padding:12px;
-  background:gold;
+  padding:14px;
   border:none;
-  border-radius:10px;
+  border-radius:12px;
+  font-weight:bold;
+  background:linear-gradient(145deg,#ffd700,#b8860b);
+  color:black;
+  box-shadow:0 0 10px rgba(255,215,0,.4);
 }
 
+/* GRID */
 .grid{
   display:grid;
   grid-template-columns:repeat(10,1fr);
-  gap:6px;
-  margin-top:10px;
+  gap:8px;
 }
 
 .cell{
   background:#111;
-  padding:10px;
-  border-radius:10px;
+  padding:12px;
+  border-radius:12px;
   text-align:center;
+  font-size:13px;
+  box-shadow:0 0 5px #000 inset;
+  transition:.2s;
 }
 
-.apartado{ background:#facc15; color:black; }
-.pagado{ background:#22c55e; }
+.cell:hover{
+  transform:scale(1.05);
+}
 
+.apartado{
+  background:linear-gradient(#facc15,#ca8a04);
+  color:black;
+}
+
+.pagado{
+  background:linear-gradient(#22c55e,#166534);
+  box-shadow:0 0 10px #22c55e;
+}
+
+/* PANEL LATERAL */
 .side{
   margin-top:15px;
+  padding:12px;
+  border-radius:12px;
   border:1px solid gold;
-  padding:10px;
-  border-radius:10px;
+  background:#111;
+}
+
+.side h3{
+  color:gold;
 }
