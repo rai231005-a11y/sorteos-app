@@ -55,6 +55,8 @@ generarBoleto(i)
 // RENDER
 function render(){
 
+let pagados=0
+
 document.querySelectorAll(".cell").forEach((c,i)=>{
 
 c.className="cell libre"
@@ -63,6 +65,8 @@ c.innerHTML=i
 if(data[i]){
 
 c.classList.add(data[i].estado)
+
+if(data[i].estado==="pagado") pagados++
 
 let emoji = data[i].nombre.includes("/") ? "🐮 " : ""
 
@@ -82,11 +86,28 @@ lista.innerHTML=""
 Object.keys(data).forEach(i=>{
 lista.innerHTML+=`<div>${i} - ${data[i].nombre}</div>`
 })
+
+// GANANCIAS
+calcular(pagados)
 }
 
-// GUARDAR
-function guardar(){
-localStorage.setItem("sorteo",JSON.stringify(data))
+// 💰 GANANCIAS
+function calcular(pagados){
+
+let costo = Number(document.getElementById("costo").value||0)
+let p1 = Number(document.getElementById("p1").value||0)
+let p2 = Number(document.getElementById("p2").value||0)
+
+let total = pagados * costo
+let premios = p1 + p2
+let ganancia = total - premios
+
+document.getElementById("ganadorBox").innerHTML += `
+<hr>
+<p>💰 Total: $${total}</p>
+<p>🏆 Premios: $${premios}</p>
+<p>📈 Ganancia: $${ganancia}</p>
+`
 }
 
 // NUEVO
@@ -95,7 +116,7 @@ localStorage.removeItem("sorteo")
 location.reload()
 }
 
-// GANADOR
+// 🏆 GANADOR PREMIUM
 function ganador(){
 
 let pagados = Object.keys(data).filter(i=>data[i].estado==="pagado")
@@ -105,10 +126,32 @@ alert("No hay números pagados")
 return
 }
 
-let g = pagados[Math.floor(Math.random()*pagados.length)]
+// MULTI GANADORES
+let seleccion = pagados.sort(()=>0.5-Math.random()).slice(0,3)
 
-document.getElementById("ganadorBox").innerHTML=
-`<h2 style="color:gold">${data[g].nombre}</h2><p>Número ${g}</p>`
+let html=`<div style="text-align:center">`
+
+seleccion.forEach((n,i)=>{
+
+let medalla = ["🥇","🥈","🥉"][i]
+
+html+=`
+<div style="
+margin:10px;
+padding:10px;
+border:2px solid gold;
+border-radius:10px;
+">
+<h2>${medalla}</h2>
+<h1 style="color:gold">${n}</h1>
+<p>${data[n].nombre}</p>
+</div>
+`
+})
+
+html+=`</div>`
+
+document.getElementById("ganadorBox").innerHTML=html
 }
 
 // 🎟️ BOLETO PRO
@@ -118,10 +161,9 @@ let info=data[num]
 
 let html=`
 <div style="
-background:linear-gradient(#000,#111);
+background:black;
 color:white;
 padding:30px;
-font-family:Arial;
 text-align:center;
 border:2px solid gold;
 border-radius:20px;
@@ -159,7 +201,7 @@ div.remove()
 })
 }
 
-// 📤 EXPORT PREMIUM REAL (YA COMO TU IMAGEN)
+// 📤 EXPORT FINAL
 function exportar(){
 
 let html=`
@@ -168,7 +210,6 @@ background:black;
 color:white;
 padding:40px;
 width:900px;
-font-family:Arial;
 border:2px solid gold;
 border-radius:20px;
 ">
@@ -180,13 +221,12 @@ border-radius:20px;
 
 <p style="text-align:center">${document.getElementById("desc").value||""}</p>
 
-<div style="text-align:center;margin-bottom:15px;">
+<div style="text-align:center">
 🏆 ${document.getElementById("p1").value||""}<br>
-🏆 ${document.getElementById("p2").value||""}<br>
-💲 $${document.getElementById("costo").value||""}
+🏆 ${document.getElementById("p2").value||""}
 </div>
 
-<div style="display:grid;grid-template-columns:repeat(10,1fr);gap:5px;">
+<div style="display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-top:10px">
 ${tablaExport()}
 </div>
 
@@ -203,7 +243,7 @@ setTimeout(()=>{
 html2canvas(div,{scale:2}).then(canvas=>{
 let a=document.createElement("a")
 a.href=canvas.toDataURL()
-a.download="sorteo_pro.png"
+a.download="sorteo.png"
 a.click()
 div.remove()
 })
@@ -221,15 +261,13 @@ let txt=i
 
 if(data[i]){
 
-if(data[i].estado=="pagado"){
+if(data[i].estado==="pagado"){
 style="background:#16a34a;color:white"
 }else{
 style="background:#facc15;color:black"
 }
 
-let emoji = data[i].nombre.includes("/") ? "🐮 " : ""
-
-txt=i+"<br>"+emoji+data[i].nombre
+txt=i+"<br>"+data[i].nombre
 }
 
 html+=`<div style="padding:10px;border-radius:8px;text-align:center;${style}">${txt}</div>`
